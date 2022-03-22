@@ -1,0 +1,37 @@
+.slider {
+  background-color: #121212;
+  width: 60vw;
+  height: max-content;
+  img {
+    width: 40vw;
+    height: fit-content;
+  }
+}
+.react-multiple-carousel__arrow--right {
+  right: 0px;
+  border-radius: 4px 0 0 4px;
+}
+.react-multiple-carousel__arrow--left {
+  left: 0px;
+  border-radius: 0 4px 4px 0;
+}
+.react-multiple-carousel__arrow {
+  padding: 40px 15px;
+  box-shadow: 1px 2px 10px -1px rgba(0, 0, 0, 30%);
+  background-color: white;
+}
+.react-multiple-carousel__arrow::before {
+  color: #494949;
+  font-weight: bolder;
+}
+.game-card {
+  position: relative;
+  img {
+    position: absolute;
+    z-index: 1;
+  }
+  .card-button {
+    position: absolute;
+    z-index: 2;
+  }
+}

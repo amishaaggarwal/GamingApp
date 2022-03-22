@@ -1,0 +1,59 @@
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.container {
+    height: 100vh;
+    background-color: RGB(37, 45, 56);
+    padding: 2%;
+    .login {
+        background: url('https://cdna.artstation.com/p/assets/images/images/010/036/500/large/kieran-baker-xboy-neon-logos.jpg?1522214830');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding: 6vh 0;
+        border: 1px solid rgba(0, 0, 0, 0.452);
+
+        .input-text {
+            background-color: #ccc;
+           
+        }
+        .input-label {
+            color: RGB(151, 218, 149);
+        }
+        .login-text {
+            text-align: center;
+            color: RGB(151, 218, 149);
+            margin: 0 0 5% 0;
+        }
+        .login-btn {
+            background-color: rgba(0, 183, 255, 0.795);
+        }
+        .bottom-text {
+            text-align: center;
+            margin: 5% 0 1% 0;
+            font-size: 14px;
+            color: #ccc;
+        }
+        .bottom-link {
+            cursor: pointer;
+            text-decoration: underline;
+            margin-left: 1%;
+            color: rgba(0, 183, 255, 0.795);
+        }
+        .provider-block {
+            padding: 3% 0 0 3%;
+            .provider-btn {
+                color: #ccc;
+                background-color: rgba(0, 183, 255, 0.795);
+
+                .provder-icons {
+                    margin: 0 0 0 1%;
+                }
+            }
+        }
+    }
+   
+}
