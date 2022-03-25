@@ -1,4 +1,5 @@
 import TicTac from "Games/Tic-Tac-Toe/App.js";
+import PingPong from "Games/Ping-Pong/App.js";
 import DashBoard from "pages/DashBoard/DashBoard";
 import Login from "pages/Login/Login";
 import React from "react";
@@ -10,6 +11,7 @@ function Routing() {
       <Route path="/" element={<Login />} />
       <Route path="/dashboard" element={<DashBoard />} />
       <Route path="/dashboard/tic-tac-toe" element={<TicTac />} />
+      <Route path="/dashboard/ping-pong" element={<PingPong />} />
     </Routes>
   );
 }

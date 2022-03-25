@@ -1,0 +1,86 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.modal-content {
+  .g-signin {
+    background-color:white;
+    color: #007272;
+    &:hover {
+       background-color: whitesmoke;
+    }
+  }
+  .enter-game-btn {
+    background-color: black;
+    color: palegoldenrod;
+    margin: 3% 15%;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.329);
+      color: palegoldenrod;
+    }
+  }
+  .close-btn {
+    background-color: rgba(0, 0, 0, 0.103);
+    color: blanchedalmond;
+    // margin-top: 5%;
+    float: right;
+  }
+  .copy-link-btn {
+    background-color: blanchedalmond;
+    color: black;
+     &:hover {
+      background-color: rgba(0, 0, 0, 0.329);
+      color: palegoldenrod;
+    }
+  }
+}
+.starting-page {
+    width: 100vw;
+    height: 100vh;
+  .login-page {
+    display: flex;
+    flex-direction: column;
+    background: url("https://images.unsplash.com/photo-1576617497557-22895ee5930b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGluZyUyMHBvbmd8ZW58MHx8MHx8&w=1000&q=80") no-repeat;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+
+    .game-name {
+        font-size: 80px;
+        text-shadow :3px 4px #008b8b;
+        text-align: center;
+        color: #fff;
+
+    }   
+    .mid-content {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+  
+    .all-btn {
+        display: flex;
+        flex-direction: column;
+        padding: 5%;
+        .startscreen-btn {
+            background-color: #00a6a6;
+            color: black;
+            padding: 15px 60px;
+            font-weight: 600;
+            margin: 15% 5%;
+            transition: all 0.3s ease;
+         
+            &:hover {
+                background-color: #008b8b62;
+               
+                color: aliceblue;
+                box-shadow: rgba(0, 0, 0, 0.445) 0px 3px 8px;
+            }
+        }
+        
+    }
+    
+  }
+}
