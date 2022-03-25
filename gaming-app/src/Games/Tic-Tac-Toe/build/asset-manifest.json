@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.c499638d.css",
+    "main.js": "/static/js/main.2fe301b8.js",
+    "static/js/510.9fb322d6.chunk.js": "/static/js/510.9fb322d6.chunk.js",
+    "static/js/27.0c7e65d4.chunk.js": "/static/js/27.0c7e65d4.chunk.js",
+    "static/media/Wanted.mp3": "/static/media/Wanted.93836c011ccdb6a9439f.mp3",
+    "static/media/bg-brick.jpg": "/static/media/bg-brick.66980454ac9aa7acf26b.jpg",
+    "static/media/tic-tac.ico": "/static/media/tic-tac.707763fa361dbc5f8e2b.ico",
+    "index.html": "/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.c499638d.css",
+    "static/js/main.2fe301b8.js"
+  ]
+}

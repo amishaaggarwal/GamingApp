@@ -62,8 +62,10 @@ function DrawerLeft() {
       </List>
     </Box>
   );
-  let myUser = JSON.parse(getSessionStorage("user"));
-  myUser = myUser.email.replace(/[^a-zA-Z/\d]/g, "");
+  let myUser = getSessionStorage("user");
+  
+  myUser = myUser.replace(/[^a-zA-Z/\d]/g, "");
+
   useEffect(() => {
     updateFireBase("UserList", myUser, "isOnline", true);
     onDisconnect(ref(db, `UserList/${myUser}/isOnline`)).set(false);

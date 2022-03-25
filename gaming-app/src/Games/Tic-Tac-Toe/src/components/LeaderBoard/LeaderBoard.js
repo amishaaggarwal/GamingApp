@@ -25,7 +25,7 @@ function LeaderBoard() {
       if (Object.keys(obj).length > 0 && loc.search("dashboard") !== -1) {
         Object.keys(obj).forEach((row, key) => {
           let games = {};
-          obj[row]["gameID"] && Object.values(obj[row]["gameID"]).map((u) => {
+          Object.values(obj[row]["gameID"]).map((u) => {
             Object.values(u).map((o) => {
               let data = {};
               games[o.game] = {};

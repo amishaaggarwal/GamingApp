@@ -1,0 +1,84 @@
+.tic-tac-grid {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 33vw;
+}
+.tic-tac-row {
+  display: inline-flex;
+}
+.b-bottom {
+  border-bottom: 3px solid #eaedf0;
+}
+.b-right {
+  border-right: 3px solid #eaedf0;
+}
+
+.rst-button {
+  margin-top: 40px;
+  background-image: linear-gradient(
+    to right top,
+    #00ffff,
+    #78fef7,
+    #a6fcf2,
+    #c9f9f0,
+    #e6f6f2
+  );
+  border-radius: 5px;
+  border: none;
+  padding: 5px 10px;
+  width:20vw;
+}
+
+.cross {
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #235789, 0 0 20px #235789,
+    0 0 25px #235789, 0 0 30px #235789, 0 0 35px #235789;
+}
+.zero {
+  text-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 10px yellow, 0 0 15px yellow,
+    0 0 20px yellow, 0 0 25px yellow, 0 0 30px yellow;
+}
+
+.winning-modal {
+  width: auto;
+  background-color: #121212;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 64vh;
+  margin-top: 18vh;
+  color: white;
+  font-size: calc(2em + 6px);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+}
+.btn-close {
+  margin-top: 40px;
+}
+.upper-container {
+  display: inline-flex;
+  width: 100vw;
+  justify-content: space-around;
+}
+.move-text {
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  margin-bottom: 3vh;
+  font-size: calc(1em + 6px);
+  color: aqua;
+}
+.button-row
+{
+  max-height: min-content;
+}

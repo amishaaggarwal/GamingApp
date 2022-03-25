@@ -6,24 +6,27 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import {
-    createUserWithEmailAndPassword,
-    FacebookAuthProvider,
-    GoogleAuthProvider,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    signInWithPopup,
-    signOut
+  createUserWithEmailAndPassword,
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
 } from "firebase/auth";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { setSessionStorage } from "utils/Storage/SessionStorage";
+import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { auth } from "utils/firebaseSetup/FirebaseSetup";
+import { setSessionStorage } from "utils/Storage/SessionStorage";
 import "./Login.scss";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [dname, setDname] = useState("");
   const [user, setUser] = useState({});
   const [isLoginPage, setIsLoginPage] = useState(true);
   const navigate = useNavigate();
@@ -34,7 +37,21 @@ export default function Login() {
   const register = async () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
-      toast.success(`welcom to the game dashboard`, {
+      updateProfile(auth.currentUser, {
+        displayName: dname,
+        photoURL: "https://example.com/jane-q-user/profile.jpg",
+      });
+      updateFireBase("UserList", email, "name", dname);
+      updateFireBase("UserList", email, "email", email);
+      updateFireBase(
+        "UserList",
+        email,
+        "dp",
+        "https://example.com/jane-q-user/profile.jpg"
+      );
+      updateFireBase("UserList", email, "scoreCredit", 0);
+
+      toast.success(`Welcome to the game dashboard!`, {
         theme: "dark",
       });
       redirectTo();
@@ -52,8 +69,7 @@ export default function Login() {
   const login = async () => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
-
-      toast.success(`loggedin success`, {
+      toast.success(`Logged-in Success!`, {
         theme: "dark",
       });
       redirectTo();
@@ -89,6 +105,26 @@ export default function Login() {
             email: result.user.email,
           })
         );
+        updateFireBase(
+          "UserList",
+          result.user.email,
+          "name",
+          result.user.displayName
+        );
+        updateFireBase(
+          "UserList",
+          result.user.email,
+          "email",
+          result.user.email
+        );
+        updateFireBase(
+          "UserList",
+          result.user.email,
+          "dp",
+          result.user.photoURL
+        );
+        updateFireBase("UserList", result.user.email, "scoreCredit", 0);
+
         toast.success(`loggedin success`, {
           theme: "dark",
         });
@@ -108,18 +144,15 @@ export default function Login() {
     signInWithPopup(auth, FBprovider)
       .then((result) => {
         const user = result.user;
-        console.log(user);
         const credential = FacebookAuthProvider.credentialFromResult(result);
         const accessToken = credential.accessToken;
         redirectTo();
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-
-        const email = error.email;
-        const credential = FacebookAuthProvider.credentialFromError(error);
+        toast.error(`${error.code}:${error.message}`, {
+          theme: "dark",
+          position: "top-center",
+        });
       });
   };
 
@@ -138,6 +171,18 @@ export default function Login() {
           >
             <Box>
               <Stack spacing={3}>
+                {!isLoginPage && (
+                  <>
+                    <label className="input-label">Username</label>
+                    <TextField
+                      id="standard-basic"
+                      className="input-text"
+                      type="text"
+                      value={dname}
+                      onChange={(e) => setDname(e.target.value)}
+                    />
+                  </>
+                )}
                 <label className="input-label">Email</label>
                 <TextField
                   id="standard-basic"

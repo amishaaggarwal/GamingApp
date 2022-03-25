@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+.playscreen {
+  background-color: #121212;
+  background: url("../../assets/images/bg-brick.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  font-size: calc(.5em + 1vw);
+  align-items: center;
+  flex-direction: column;
+}
+.heading {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+  padding-top: 30px;
+  font-size: calc(3em + 6px);
+  color: aqua;
+  margin-bottom: 3vh;
+}

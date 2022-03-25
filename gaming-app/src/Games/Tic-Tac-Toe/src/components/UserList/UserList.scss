@@ -1,0 +1,22 @@
+.userlist
+{
+    min-height: 60vh;
+    max-width: 25vw;
+    border-radius: 9px;
+}
+.request-cancel {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    width:50%;
+    height: 25%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    background-color: #13233a;
+    
+}
+.modal-overlay {
+    background-color: rgba(0, 0, 0, .5);
+}
