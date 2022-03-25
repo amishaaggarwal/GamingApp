@@ -1,23 +1,23 @@
-import Squares from "components/Squares/Squares";
-import WinningScreen from "components/WinningScreen/WinningScreen";
-import React, { useState, useEffect, useCallback } from "react";
-import Modal from "react-modal";
-import { toast } from "react-toastify";
-import Confetti from "react-confetti";
+import { Button, Stack } from "@mui/material";
+import DrawScreen from "../../components/DrawScreen/DrawScreen";
 import { CROSS, ZERO } from "constants/game-constants";
 import {
   CELL_OCCUPIED,
   DRAW,
   LOST,
-  NOT_YOUR_TURN,
+  NOT_YOUR_TURN
 } from "constants/notification-constants";
-import { Stack, Button } from "@mui/material";
-import DrawScreen from "components/DrawScreen/DrawScreen";
-import { useLocation, useParams } from "react-router-dom";
-import { getSessionStorage } from "utils/Storage/SessionStorage";
-import { db } from "utils/firebaseSetup/FirebaseSetup";
 import { onValue, ref } from "firebase/database";
+import React, { useCallback, useEffect, useState } from "react";
+import Confetti from "react-confetti";
+import Modal from "react-modal";
+import { useLocation, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
+import { db } from "utils/firebaseSetup/FirebaseSetup";
+import { getSessionStorage } from "utils/Storage/SessionStorage";
+import Squares from "../../components/Squares/Squares";
+import WinningScreen from "../../components/WinningScreen/WinningScreen";
 //-empty grid
 const initialState = ["", "", "", "", "", "", "", "", ""];
 

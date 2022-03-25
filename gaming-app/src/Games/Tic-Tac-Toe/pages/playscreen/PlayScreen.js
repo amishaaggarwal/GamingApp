@@ -1,7 +1,7 @@
-import Footer from "components/Footer/Footer";
-import Multiplayer from "components/Multiplayer/Multiplayer";
-import TicTacGridSinglePlayer from "components/TicTacGridSinglePlayer/TicTacGridSinglePlayer";
-import ModeSelect from "components/ModeSelect/ModeSelect";
+import Footer from "../../components/Footer/Footer";
+import Multiplayer from "../../components/Multiplayer/Multiplayer";
+import TicTacGridSinglePlayer from "../../components/TicTacGridSinglePlayer/TicTacGridSinglePlayer";
+import ModeSelect from "../../components/ModeSelect/ModeSelect";
 import React, { useState } from "react";
 import "./Playscreen.scss";
 

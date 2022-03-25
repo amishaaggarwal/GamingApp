@@ -1,6 +1,6 @@
 import { Box, Button, Stack } from "@mui/material";
-import LeaderBoard from "components/LeaderBoard/LeaderBoard";
-import UserList from "components/UserList/UserList";
+import LeaderBoard from "../../components/LeaderBoard/LeaderBoard";
+import UserList from "../../components/UserList/UserList";
 import { onValue, ref } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";

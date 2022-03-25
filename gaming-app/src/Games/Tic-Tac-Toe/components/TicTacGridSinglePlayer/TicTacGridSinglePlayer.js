@@ -1,14 +1,14 @@
-import Squares from "components/Squares/Squares";
-import WinningScreen from "components/WinningScreen/WinningScreen";
-import React, { useState, useEffect, useCallback, useContext } from "react";
-import Modal from "react-modal";
-import { toast } from "react-toastify";
-import Confetti from "react-confetti";
+import { Button, Stack } from "@mui/material";
+import DrawScreen from "../../components/DrawScreen/DrawScreen";
+import Squares from "../../components/Squares/Squares";
+import WinningScreen from "../../components/WinningScreen/WinningScreen";
 import { CROSS, ZERO } from "constants/game-constants";
 import { CELL_OCCUPIED, NOT_YOUR_TURN } from "constants/notification-constants";
-import { Stack, Button } from "@mui/material";
-import DrawScreen from "components/DrawScreen/DrawScreen";
 import { PlayerContext } from "index";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import Confetti from "react-confetti";
+import Modal from "react-modal";
+import { toast } from "react-toastify";
 import "./TicTacGrid.scss";
 
 const initialState = ["", "", "", "", "", "", "", "", ""];

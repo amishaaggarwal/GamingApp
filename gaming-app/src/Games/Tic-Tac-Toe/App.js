@@ -1,4 +1,4 @@
-import PlayScreen from "pages/playscreen/PlayScreen";
+import PlayScreen from "./pages/playscreen/PlayScreen";
 import "./App.css";
 
 function App() {

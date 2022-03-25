@@ -26,7 +26,7 @@ function LeaderBoard() {
         Object.keys(obj).forEach((row, key) => {
           let games = {};
           obj[row]["gameID"] && Object.values(obj[row]["gameID"]).map((u) => {
-            Object.values(u).map((o) => {
+            u && Object.values(u).map((o) => {
               let data = {};
               games[o.game] = {};
               data["total"] = games[o.game].total ? games[o.game].total + 1 : 1;

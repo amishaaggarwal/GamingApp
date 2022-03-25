@@ -14,10 +14,12 @@ function GameList() {
     {
       img: tt,
       title: "Tic Tac Toe",
+      path:"tic-tac-toe",
     },
     {
       img: pp,
       title: "Ping Pong",
+      path:"ping-pong",
     },
   ];
   return (
@@ -25,7 +27,7 @@ function GameList() {
       <Typography sx={{ color: "#B9EFA4", fontSize: "20px" }}>Games</Typography>
       <ImageList className="game-list">
         {itemData.map((item) => (
-          <ImageListItem key={item.img} onClick={() => navigate("/")} sx={{maxHeight:"200px",width:"200px"}}>
+          <ImageListItem key={item.img} onClick={() => navigate(`${item.path}`)} sx={{maxHeight:"200px",width:"200px"}}>
             <img
               src={item.img}
               srcSet={item.img}
