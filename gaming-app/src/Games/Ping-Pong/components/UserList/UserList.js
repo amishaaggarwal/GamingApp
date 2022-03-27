@@ -18,10 +18,10 @@ import "./UserList.scss";
 
 function UserList() {
   const [activeUsers, setActiveUsers] = useState({});
-  const myUser = getFromSession("user");
+  const myUser = JSON.parse(getFromSession("user"));
   const [open, setOpen] = useState(false);
   const [requestId, setRequestId] = useState("");
-
+console.log(myUser);
   //-opens lost modal
   const openModal = () => {
     setOpen(true);
@@ -67,23 +67,24 @@ function UserList() {
   }, [requestId]);
 
   const sendRequest = (actUserEmail) => {
-    const newKey = push(child(ref, "GameSession")).key;
+    const newKey = push(child(ref(db, "GameSession/"), "GameSession")).key;
     let key = newKey.substring(1);
+    console.log(key);
     setRequestId(key);
     setInSession("sessionId", key);
     updateFirebase("Invites", key, "request_status", "pending");
-    updateFirebase("Invites", key, "from", myUser);
+    updateFirebase("Invites", key, "from", myUser.email);
     updateFirebase("Invites", key, "to", actUserEmail);
-    updateFirebase("Invites", key, "game", "tic-tac");
+    updateFirebase("Invites", key, "game", "ping-pong");
     updateFirebase("Invites", key, "requestId", key);
 
     openModal();
   };
 
   const cancelRequest = () => {
-    console.log(requestId);
+   
     updateFirebase("Invites", requestId, "request_status", "cancel");
-    updateFirebase("Invites", requestId, "from", myUser);
+    updateFirebase("Invites", requestId, "from", myUser.email);
     updateFirebase("Invites", requestId, "to", "");
     closeModal();
   };

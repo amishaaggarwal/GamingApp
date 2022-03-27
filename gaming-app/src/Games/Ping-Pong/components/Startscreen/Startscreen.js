@@ -16,6 +16,7 @@ import Notification from "Games/Ping-Pong/components/Notification/Notification";
 import UserList from "Games/Ping-Pong/components/UserList/UserList";
 
 function Startscreen(props) {
+  const [open, setOpen] = useState(false);
   const [data, setData] = useState(null);
   const [ishared, setIshared] = useState(false);
   const [isLoggedin, setIsLoggedin] = useState(false);
@@ -45,155 +46,105 @@ function Startscreen(props) {
     }
   }, [gameid, uID]);
 
-  const gameSessionUrl = window.location.href;
+  // const gameSessionUrl = window.location.href;
 
-  const [modalIsOpen, setIsOpen] = useState(false);
 
-  const provider = new GoogleAuthProvider();
+  // const provider = new GoogleAuthProvider();
 
-  const signInWithGoggle = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        setIsLoggedin(true);
+  // const signInWithGoggle = () => {
+  //   signInWithPopup(auth, provider)
+  //     .then((result) => {
+  //       setIsLoggedin(true);
 
-        setInSession(
-          "user",
-          JSON.stringify({
-            name: result.user.displayName,
-            email: result.user.email,
-          })
-        );
+  //       setInSession(
+  //         "user",
+  //         JSON.stringify({
+  //           name: result.user.displayName,
+  //           email: result.user.email,
+  //         })
+  //       );
 
-        set(ref(db, `Game/${uID}`), {
-          players: {
-            player1: {
-              name: !ishared
-                ? result.user.displayName
-                : data.players.player1.name,
-              email: !ishared ? result.user.email : data.players.player1.email,
-            },
-            player2: {
-              name: ishared ? result.user.displayName : "",
-              email: ishared ? result.user.email : "",
-            },
-          },
+  //       set(ref(db, `Game/${uID}`), {
+  //         players: {
+  //           player1: {
+  //             name: !ishared
+  //               ? result.user.displayName
+  //               : data.players.player1.name,
+  //             email: !ishared ? result.user.email : data.players.player1.email,
+  //           },
+  //           player2: {
+  //             name: ishared ? result.user.displayName : "",
+  //             email: ishared ? result.user.email : "",
+  //           },
+  //         },
 
-          gamestate: {
-            ball: {
-              x: wWidth / 2,
-              y: wHeight / 2.15,
-            },
-            player1_paddle: {
-              y: wHeight / 2.5,
-            },
-            player2_paddle: {
-              y: wHeight / 2.5,
-            },
-            score: {
-              player1_score: 0,
-              player2_score: 0,
-            },
-            ballspeed: {
-              x: 0,
-              y: 0,
-            },
-          },
-          start: false,
-          winner: {},
-        });
+  //         gamestate: {
+  //           ball: {
+  //             x: wWidth / 2,
+  //             y: wHeight / 2.15,
+  //           },
+  //           player1_paddle: {
+  //             y: wHeight / 2.5,
+  //           },
+  //           player2_paddle: {
+  //             y: wHeight / 2.5,
+  //           },
+  //           score: {
+  //             player1_score: 0,
+  //             player2_score: 0,
+  //           },
+  //           ballspeed: {
+  //             x: 0,
+  //             y: 0,
+  //           },
+  //         },
+  //         start: false,
+  //         winner: {},
+  //       });
 
-        let newUserID = result.user.email.replace(/[^a-zA-Z/\d]/g, "");
+  //       let newUserID = result.user.email.replace(/[^a-zA-Z/\d]/g, "");
 
-        update(ref(db, `UserList/${newUserID}`), {
-          name: result.user.displayName,
-          email: result.user.email,
-          dp: result.user.photoURL,
-        });
-      })
-      .catch((error) => {
+  //       update(ref(db, `UserList/${newUserID}`), {
+  //         name: result.user.displayName,
+  //         email: result.user.email,
+  //         dp: result.user.photoURL,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       toast.error(error.message, {
+  //         theme: "dark",
+  //         position: "top-center",
+  //       });
+  //     });
+  // };
 
-        toast.error(error.message, {
-          theme:'dark',
-          position:'top-center'
-        })
-      });
+  //-selects mode
+  const changeMode = (mode) => {
+    switch (mode) {
+      case "singleplayer":
+        props.parentCallback("singleplayer");
+        break;
+      case "multiplayer":
+        openModal();
+        // props.parentCallback("multiplayer");  
+        break;
+      default:
+        props.parentCallback("/");
+    }
   };
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      width: "50%",
-      height: "35%",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: "#007272",
-    },
-    overlay: {
-      backgroundColor: "rgba(0, 0, 0, .5)",
-    },
+ 
+  const openModal = () => {
+    setOpen(true);
   };
 
-  function closeModal() {
-    setIsOpen(false);
-  }
-
+  const closeModal = () => {
+    setOpen(false);
+  };
   Modal.setAppElement("#root");
 
   return (
     <>
-      {/* <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => closeModal()}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <div className="modal-content">
-          {isLoggedin ? (
-            <div>
-              {!ishared && (
-                <CopyToClipboard text={`${gameSessionUrl}${uID}`}>
-                  <Button className="copy-link-btn" variant="outlined">
-                    Click to Copy link and share with your firend!
-                  </Button>
-                </CopyToClipboard>
-              )}
-              <Button
-                variant="contained"
-                className="enter-game-btn"
-                onClick={() =>
-                  navigate(`/multiplayer/${uID}`, {
-                    state: {
-                      reset: false,
-                      uid: uID,
-                    },
-                  })
-                }
-              >
-                Enter Game
-              </Button>
-            </div>
-          ) : (
-            <div className="signin-with-google">
-              <Button className="g-signin" onClick={() => signInWithGoggle()}>
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxJzbnX4yyb7ekXoUeb4PXTamKvQ78mefFCw&usqp=CAU"
-                  alt="google"
-                  height="20%"
-                  width="20%"
-                />
-                Sign in with Google
-              </Button>
-            </div>
-          )}
-          <div className="modal-bottom">
-            <Button className="close-btn" onClick={() => closeModal()}>
-              close
-            </Button>
-          </div>
-        </div>
-      </Modal> */}
+     
       <div className="starting-page">
         <div className="login-page">
           <p className="game-name">PING PONG</p>
@@ -203,14 +154,16 @@ function Startscreen(props) {
               {!ishared && (
                 <Button
                   className="startscreen-btn"
-                  onClick={() => props.parentCallback("singleplayer")}
+                  onClick={() => changeMode('singleplayer')}
                 >
                   singleplayer
                 </Button>
               )}
               <Button
                 className="startscreen-btn"
-                onClick={() => props.parentCallback("multiplayer")}
+                onClick={() => {
+                  changeMode('multiplayer');
+                }}
               >
                 multiplayer
               </Button>
@@ -218,8 +171,15 @@ function Startscreen(props) {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={open}
+        onRequestClose={closeModal}
+        className="winning-modal"
+        overlayClassName="modal-overlay"
+      >
+        <UserList />
+      </Modal>
       <Notification />
-    
     </>
   );
 }
