@@ -214,10 +214,10 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
 //   let playerData;
 
 
-  getExistingPlayerData("UserList", userId).then((val) => {
-    playerData = val;
+// getExistingPlayerData("UserList", userId).then((val) => {
+//   playerData = val;
 
-
+// })
 //     let gameids_data = playerData.gameID ? playerData.gameID : {};
 
 //     if (newId in gameids_data) {

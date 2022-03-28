@@ -25,8 +25,8 @@ function LeaderBoard() {
       if (Object.keys(obj).length > 0 && loc.search("dashboard") !== -1) {
         Object.keys(obj).forEach((row, key) => {
           let games = {};
-          obj[row]["gameID"] && Object.values(obj[row]["gameID"]).map((u) => {
-            u && Object.values(u).map((o) => {
+          obj[row]["gameID"] && Object.values(obj[row]["gameID"]).forEach((u) => {
+            u && Object.values(u).forEach((o) => {
               let data = {};
               games[o.game] = {};
               data["total"] = games[o.game].total ? games[o.game].total + 1 : 1;
@@ -44,8 +44,8 @@ function LeaderBoard() {
         Object.keys(obj).forEach((row, key) => {
           let gameScore = 0,
             total = 0;
-          Object.values(obj[row]["gameID"]).map((u) => {
-            Object.values(u).map((o) => {
+          Object.values(obj[row]["gameID"]).forEach((u) => {
+            Object.values(u).forEach((o) => {
               total += "tic-tac" === o.game ? 1 : 0;
               gameScore += "tic-tac" === o.game && o.status === "won" ? 50 : 0;
             });

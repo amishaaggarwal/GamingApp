@@ -49,7 +49,11 @@ function UserList() {
       });
       setActiveUsers(active);
     });
-  }, [myUser]);
+
+    return () => {
+      setActiveUsers({});
+    };
+  }, [myUser.email]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -74,7 +78,6 @@ function UserList() {
     updateFireBase("Invites", key, "to", actUserEmail);
     updateFireBase("Invites", key, "game", "tic-tac");
     updateFireBase("Invites", key, "requestId", key);
-
     openModal();
   };
 
