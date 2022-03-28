@@ -26,7 +26,7 @@ import "./Login.scss";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [dname, setDname] = useState("");
+  const [username, setUsername] = useState("");
   const [user, setUser] = useState({});
   const [isLoginPage, setIsLoginPage] = useState(true);
   const navigate = useNavigate();
@@ -38,10 +38,10 @@ export default function Login() {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
       updateProfile(auth.currentUser, {
-        displayName: dname,
+        displayName: username,
         photoURL: "https://example.com/jane-q-user/profile.jpg",
       });
-      updateFireBase("UserList", email, "name", dname);
+      updateFireBase("UserList", email, "name", username);
       updateFireBase("UserList", email, "email", email);
       updateFireBase(
         "UserList",
@@ -166,6 +166,7 @@ export default function Login() {
           <Stack
             spacing={29}
             direction="row"
+            className="login-contain"
             justifyContent="center"
             divider={<Divider orientation="vertical" flexItem />}
           >
@@ -178,8 +179,8 @@ export default function Login() {
                       id="standard-basic"
                       className="input-text"
                       type="text"
-                      value={dname}
-                      onChange={(e) => setDname(e.target.value)}
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
                   </>
                 )}
