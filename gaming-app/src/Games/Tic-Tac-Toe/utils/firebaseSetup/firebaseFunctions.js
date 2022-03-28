@@ -86,6 +86,7 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
         case "gameSessionList":
           {
             let newval;
+            newKey = newKey.replace(/[^a-zA-Z/\d]/g, "");
             readFireBase("GameID", `tic-tac/users/${newKey}/gameSessions`).then(
               (res) => {
                 newval = res ? res : {};
@@ -104,6 +105,7 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
           }
           break;
         case "total_wins":
+          newKey = newKey.replace(/[^a-zA-Z/\d]/g, "");
           readFireBase("GameID", `tic-tac/users/${newKey}/total_wins`).then(
             (res) => {
               let newval = res ? parseInt(res) : 0;
@@ -118,6 +120,7 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
         case "total_games_played_by":
           {
             let newval;
+            newKey = newKey.replace(/[^a-zA-Z/\d]/g, "");
             readFireBase(
               "GameID",
               `users/${newKey}/total_games_played_by`

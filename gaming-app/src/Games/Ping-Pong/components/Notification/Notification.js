@@ -18,21 +18,18 @@ function Notification() {
 
   useEffect(() => {
     onValue(ref(db, `Invites`), (data) => {
-      console.log(data.val());
       const request = data.val();
 
       request &&
         Object.values(request).map((invite, i) => {
-          console.log(invite.requestId);
+          
           if (invite.to === myUser && invite.request_status === "pending") {
-            console.log(invite.requestId);
             setOpen(true);
             setGame(invite.game);
             setSender(invite.from);
             setRequestId(invite.requestId);
           }
         });
-      console.log(request);
     });
   }, [myUser, requestId]);
 

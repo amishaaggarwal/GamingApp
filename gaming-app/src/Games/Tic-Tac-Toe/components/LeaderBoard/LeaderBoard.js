@@ -78,6 +78,9 @@ function LeaderBoard() {
     readFireBase("UserList", ``).then((res) => {
       setLeaderBoard(res ? identifyLevel(res) : []);
     });
+    return () => {
+      setLeaderBoard([]);
+    }
   }, [identifyLevel]);
 
   return (

@@ -1,12 +1,12 @@
 import { Box, Button, Stack } from "@mui/material";
-import LeaderBoard from "../../components/LeaderBoard/LeaderBoard";
-import UserList from "../../components/UserList/UserList";
-import { onValue, ref } from "firebase/database";
+import { child, onValue, push, ref } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
-import { db } from "utils/firebaseSetup/FirebaseSetup";
-import { getSessionStorage } from "utils/Storage/SessionStorage";
+import { db, gameListRef } from "utils/firebaseSetup/FirebaseSetup";
+import { getSessionStorage, setSessionStorage } from "utils/Storage/SessionStorage";
+import LeaderBoard from "../../components/LeaderBoard/LeaderBoard";
+import UserList from "components/UserList/UserList";
 import "./ModeSelect.scss";
 
 function ModeSelect(props) {
@@ -21,7 +21,7 @@ function ModeSelect(props) {
       const request = data.val();
 
       request &&
-        Object.values(request).map((invite, i) => {
+        Object.values(request).forEach((invite, i) => {
           if (invite.request_status === "reject") {
             setRequestRejected(true);
           }
@@ -59,6 +59,9 @@ function ModeSelect(props) {
   const changeMode = (mymode) => {
     switch (mymode) {
       case "single":
+        const newKey = push(child(gameListRef, "GameSession")).key;
+        let key = newKey.substring(1);
+        setSessionStorage("key", key);
         props.parentCallback("single-player");
         break;
       case "multi":

@@ -33,10 +33,11 @@ export default function Login() {
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
   });
-
   const register = async () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
+            console.log(user);
+
       updateProfile(auth.currentUser, {
         displayName: username,
         photoURL: "https://example.com/jane-q-user/profile.jpg",
@@ -72,6 +73,7 @@ export default function Login() {
       toast.success(`Logged-in Success!`, {
         theme: "dark",
       });
+      console.log(user);
       redirectTo();
     } catch (error) {
       let index = error.message.indexOf("/");
@@ -82,13 +84,15 @@ export default function Login() {
     }
   };
 
-  const logout = async () => {
-    await signOut(auth);
-    toast.warn("you logged out to game dashboard", {
-      theme: "dark",
-      position: "bottom-center",
-    });
-  };
+  // const logout = async () => {
+  //   await signOut(auth);
+  //   toast.warn("you logged out to game dashboard", {
+  //     theme: "dark",
+  //     position: "bottom-center",
+  //   });
+  // };
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
   };
@@ -143,9 +147,9 @@ export default function Login() {
   const signInWithFaceBook = () => {
     signInWithPopup(auth, FBprovider)
       .then((result) => {
-        const user = result.user;
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
+        // const user = result.user;
+        // const credential = FacebookAuthProvider.credentialFromResult(result);
+        // const accessToken = credential.accessToken;
         redirectTo();
       })
       .catch((error) => {

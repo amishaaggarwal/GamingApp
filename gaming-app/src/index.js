@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -7,18 +7,10 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
-const player = {
-  player1: "Player1",
-  player2: "Computer",
-};
-export const PlayerContext = createContext();
-
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <PlayerContext.Provider value={player}>
-        <App />
-      </PlayerContext.Provider>
+      <App />
       <ToastContainer limit={1} id="toast-container" />
     </BrowserRouter>
   </React.StrictMode>,

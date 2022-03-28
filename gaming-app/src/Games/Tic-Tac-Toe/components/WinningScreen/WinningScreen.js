@@ -1,20 +1,14 @@
-import React, { useContext } from 'react'
-import "./WinningScreen.scss";
-import {PlayerContext} from 'index';
 import { CROSS } from 'constants/game-constants';
+import React from 'react';
+import "./WinningScreen.scss";
 
 function WinningScreen(props) {
-  const play = useContext(PlayerContext);
 
-  return props.multi ? (
+  return (
     <div className="zoom-in">
       {props.winnerIs === CROSS ? props.multi.player1.name : props.multi.player2.name} Won!
     </div>
-  ) : (
-    <div className="zoom-in">
-      {props.winnerIs === CROSS ? play.player1 : play.player2} Won!
-    </div>
-  );
+  )
 }
 
-export default WinningScreen
+export default WinningScreen;

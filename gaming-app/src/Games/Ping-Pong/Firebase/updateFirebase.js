@@ -8,6 +8,7 @@ export const getExistingPlayerData = async (endpoint, path) => {
 };
 
 export const updateFirebase = (endpoint, newId, keys, value) => {
+
     switch (endpoint) {
       case "Game":
         switch (keys) {
@@ -212,10 +213,10 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
 // ) => {
 //   let playerData;
 
-//   getExistingPlayerData('UserList', userId).then((val) => {
-//     playerData = val;
-//     console.log(playerData);
-//     console.log(playerData);
+
+  getExistingPlayerData("UserList", userId).then((val) => {
+    playerData = val;
+
 
 //     let gameids_data = playerData.gameID ? playerData.gameID : {};
 
