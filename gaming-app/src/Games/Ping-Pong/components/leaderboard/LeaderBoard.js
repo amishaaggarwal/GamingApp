@@ -24,16 +24,19 @@ function LeaderBoard() {
       if (Object.keys(obj).length > 0 && loc.search("dashboard") !== -1) {
         Object.keys(obj).forEach((row, key) => {
           let games = {};
-          Object.values(obj[row]["gameID"]).map((u) => {
-            Object.values(u).map((o) => {
-              let data = {};
-              games[o.game] = {};
-              data["total"] = games[o.game].total ? games[o.game].total + 1 : 1;
-              data["gname"] = o.game;
-              data["logo"] = logos[o.game];
-              games[o.game] = data;
+          obj[row]["gameID"] &&
+            Object.values(obj[row]["gameID"]).map((u) => {
+              Object.values(u).map((o) => {
+                let data = {};
+                games[o.game] = {};
+                data["total"] = games[o.game].total
+                  ? games[o.game].total + 1
+                  : 1;
+                data["gname"] = o.game;
+                data["logo"] = logos[o.game];
+                games[o.game] = data;
+              });
             });
-          });
           res.push([row, obj[row]["totalScore"], games]);
         });
       } else if (

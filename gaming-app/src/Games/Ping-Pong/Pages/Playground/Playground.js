@@ -3,6 +3,7 @@ import React, {useState} from 'react'
 import Singleplayer from '../../components/Playscreen/singleplayer/Singleplayer';
 import Multiplayer from "../../components/Playscreen/multiplayer/Multiplayer";
 import Startscreen from '../../components/Startscreen/Startscreen'
+import DrawerLeft from 'components/DrawerLeft/DrawerLeft';
 
 
 function Playground() {
@@ -25,9 +26,10 @@ function Playground() {
     };
 
     return (
-        <>
-          {switchMode(toHere)}
-        </>
+      <>
+        {switchMode(toHere)}
+        <DrawerLeft />
+      </>
     );
 }
 

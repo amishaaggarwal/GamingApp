@@ -42,7 +42,7 @@ console.log(myUser);
       ]);
       dataArray.forEach((e) => {
         e[1].isOnline === true &&
-          e[1].email !== myUser &&
+          e[1].email !== myUser.email &&
           active.push({
             name: e[1].name,
             email: e[1].email,
