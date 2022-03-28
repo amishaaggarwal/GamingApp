@@ -71,7 +71,7 @@ function DrawerLeft() {
 
   return (
     <div>
-      {["left"].map((anchor) => (
+      {/* {["left"].map((anchor) => (
         <React.Fragment key={anchor}>
           <Tooltip title="Open Menu">
             <div onClick={toggleDrawer(anchor, true)} className="drawer-button">
@@ -86,7 +86,7 @@ function DrawerLeft() {
             {list(anchor)}
           </Drawer>
         </React.Fragment>
-      ))}
+      ))} */}
     </div>
   );
 }

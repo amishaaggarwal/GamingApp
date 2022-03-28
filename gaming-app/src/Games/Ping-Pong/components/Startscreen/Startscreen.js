@@ -122,6 +122,7 @@ function Startscreen(props) {
   const changeMode = (mode) => {
     switch (mode) {
       case "singleplayer":
+        // setSinglePalyerData();
         props.parentCallback("singleplayer");
         break;
       case "multiplayer":
@@ -179,7 +180,7 @@ function Startscreen(props) {
       >
         <UserList />
       </Modal>
-      <Notification />
+      {/* <Notification /> */}
     </>
   );
 }

@@ -1,13 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
-import { getFromSession } from "Games/Ping-Pong/util/storage/sessionStorage";
+import { getSessionStorage } from "utils/Storage/SessionStorage";
 import { updateFirebase } from "Games/Ping-Pong/Firebase/updateFirebase";
 
 import "./LoosingScreen.scss";
 
 function LoosingScreen(props) {
-  const { state } = useLocation();
+
+  const user = JSON.parse(getSessionStorage("user"));
+  console.log(user);
+  const [mode, setmode] = useState("");
+  const [winner, setWinner] = useState("");
+  const [player1_score, setPlayer1_score] = useState("");
+  const [player2_score, setPlayer2_score] = useState("");
+
   // let preGameId = state.gameId;
   // let looser = state.losePlayer;
   // let player1 = state.player1;
@@ -20,21 +27,29 @@ function LoosingScreen(props) {
 
   // let navigateHere = preGameId ? `/multiplayer/${preGameId}` : "/playsolo";
 
-  // useEffect(() => {
-  //   console.log('inlostpage');    
-  //   preGameId &&
-  //     updateuserList(
-  //       user_email_id,
-  //       preGameId,
-  //       0,
-  //       1,
-  //       "lost",
-  //       player1_score,
-  //       player2_score
-  //     );
-  // })
+  //- for single player
+  useEffect(() => {
+    setmode(props.mode);
+    setWinner(props.winner);
+    setPlayer1_score(props.player1_score);
+    setPlayer2_score(props.player2_score);
 
-  const navigate = useNavigate();
+    return () => {};
+  }, [props.mode, props.winner, props.player1_score, props.player2_score]);
+
+  useEffect(() => {
+    if (mode === "singleplayer") {
+      console.log("d");
+      updateFirebase("UserList", user.email, "total_games", 1);
+    } else {
+      console.log("sin");
+    }
+  }, [
+    mode,
+    user.email,
+    /*player1_score, player2_score, preGameId, user_email_id*/
+  ]);
+
   return (
     <>
       <div className="winning-background">
@@ -58,9 +73,7 @@ function LoosingScreen(props) {
           >
             Play Again
           </Button>
-          <Button onClick={() => navigate("/")} className="back">
-            Back
-          </Button>
+          <Button className="back">Back</Button>
         </div>
       </div>
     </>

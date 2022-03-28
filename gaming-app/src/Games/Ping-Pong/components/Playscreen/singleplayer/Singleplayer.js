@@ -17,7 +17,7 @@ function Singleplayer(props) {
   let ballY;
   let PaddleY;
   let PaddleY2;
-  let player1_name = "win";
+  let player1_name = "you";
   let player1_score;
   let player2_score;
 
@@ -246,8 +246,16 @@ function Singleplayer(props) {
     sel.changed(changeDeficulty);
 
     // for ai move
-    if (ballX > wWidth - (200 + Math.floor(Math.random() * followBall))) {
-      PaddleY2 = aiMove(wHeight / 1.5, wHeight / 7.5, ballY, 0);
+    // if (ballX > wWidth - (200 + Math.floor(Math.random() * followBall))) {
+    //   PaddleY2 = aiMove(wHeight / 1.5, wHeight / 7.5, ballY, 0);
+    // }
+     if (ballX > wWidth - (200 + Math.floor(Math.random() * followBall))) {
+      PaddleY2 = aiMove(
+        wHeight / 1.5,
+        wHeight / 7.5,
+        ballY,
+        miss
+      );
     }
   };
 
@@ -345,13 +353,16 @@ function Singleplayer(props) {
         winner === "you" ? (
           <WinningScreen
             parentCallback={setWinnerName}
+            mode={"singleplayer"}
             winner={player1_name}
             player1_score={player1_score}
             player2_score={player2_score}
+
           />
         ) : (
           <LoosingScreen
             parentCallback={setWinnerName}
+            mode={"singleplayer"}
             looser={player1_name}
             player1_score={player1_score}
             player2_score={player2_score}
