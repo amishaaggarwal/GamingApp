@@ -20,7 +20,6 @@ function Playground() {
     }
 
     const handleCallback = (childData) => {
-        console.log(childData);
         setToHere(childData);
     };
 

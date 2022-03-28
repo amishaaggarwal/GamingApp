@@ -8,8 +8,8 @@ export const getExistingPlayerData = async (endpoint, path) => {
 };
 
 export const updateFirebase = (endpoint, newId, keys, value) => {
-    switch(endpoint) {
-     case 'Game':
+  switch (endpoint) {
+    case "Game":
       switch (keys) {
         case "ballX":
           update(ref(db, `${endpoint}/${newId}/gamestate/ball`), {
@@ -62,34 +62,33 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
           });
           break;
       }
-      case "Invites":
-        { console.log("here");
-          let req_id = newId;
-          switch (keys) {
-            case "request_status":
-              console.log("here");
-              update(ref(db, `${endpoint}/${req_id}`), { request_status: value });
-              break;
-            case "from":
-              update(ref(db, `${endpoint}/${req_id}`), { from: value });
-              break;
-            case "to":
-              update(ref(db, `${endpoint}/${req_id}`), { to: value });
-              break;
-            case "game":
-              update(ref(db, `${endpoint}/${req_id}`), { game: value });
-              break;
-            case "requestId":
-              update(ref(db, `${endpoint}/${req_id}`), { requestId: value });
-              break;
-            default:
-              break;
-          }
+    case "Invites":
+      {
+        let req_id = newId;
+        switch (keys) {
+          case "request_status":
+            update(ref(db, `${endpoint}/${req_id}`), { request_status: value });
+            break;
+          case "from":
+            update(ref(db, `${endpoint}/${req_id}`), { from: value });
+            break;
+          case "to":
+            update(ref(db, `${endpoint}/${req_id}`), { to: value });
+            break;
+          case "game":
+            update(ref(db, `${endpoint}/${req_id}`), { game: value });
+            break;
+          case "requestId":
+            update(ref(db, `${endpoint}/${req_id}`), { requestId: value });
+            break;
+          default:
+            break;
         }
-        break;
-      default:
-        break;
-    }
+      }
+      break;
+    default:
+      break;
+  }
 };
 
 export const updateuserList = (
@@ -103,10 +102,8 @@ export const updateuserList = (
 ) => {
   let playerData;
 
-  getExistingPlayerData('UserList', userId).then((val) => {
+  getExistingPlayerData("UserList", userId).then((val) => {
     playerData = val;
-    console.log(playerData);
-    console.log(playerData);
 
     let gameids_data = playerData.gameID ? playerData.gameID : {};
 

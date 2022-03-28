@@ -21,7 +21,6 @@ function UserList() {
   const myUser = JSON.parse(getFromSession("user"));
   const [open, setOpen] = useState(false);
   const [requestId, setRequestId] = useState("");
-console.log(myUser);
   //-opens lost modal
   const openModal = () => {
     setOpen(true);
@@ -35,7 +34,6 @@ console.log(myUser);
   useEffect(() => {
     let active = [];
     onValue(ref(db, `UserList/`), (data) => {
-      console.log(data.val());
       let dataArray = Object.keys(data.val()).map((key) => [
         key,
         data.val()[key],
@@ -54,7 +52,6 @@ console.log(myUser);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      console.log(requestId);
       if (requestId) {
         updateFirebase("Invites", requestId, "request_status", "expire");
         updateFirebase("Invites", requestId, "to", "");
@@ -69,7 +66,6 @@ console.log(myUser);
   const sendRequest = (actUserEmail) => {
     const newKey = push(child(ref(db, "GameSession/"), "GameSession")).key;
     let key = newKey.substring(1);
-    console.log(key);
     setRequestId(key);
     setInSession("sessionId", key);
     updateFirebase("Invites", key, "request_status", "pending");
@@ -120,7 +116,6 @@ console.log(myUser);
         </ListItem>
         {activeUsers &&
           Object.values(activeUsers).map((actUser, i) => {
-            console.log(actUser);
             const labelId = `checkbox-list-secondary-label-${actUser}`;
             return (
               <ListItem key={i} disablePadding>

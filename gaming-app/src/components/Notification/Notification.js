@@ -25,8 +25,7 @@ function Notification() {
     onValue(ref(db, `Invites`), (data) => {
       const request = data.val();
       
-      request && Object.values(request).map((invite, i) => {
-       
+      request && Object.values(request).map((invite, i) => {       
         if(invite.to === myUser && invite.request_status === 'pending') {
             setOpen(true);
             setGame(invite.game);

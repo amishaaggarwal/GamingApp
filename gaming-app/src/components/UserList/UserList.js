@@ -18,7 +18,7 @@ import "./UserList.scss";
 
 function UserList() {
   const [activeUsers, setActiveUsers] = useState({});
-  const myUser = getSessionStorage("user");
+  const myUser = JSON.parse(getSessionStorage("user"));
   const [open, setOpen] = useState(false);
   const [requestId, setRequestId] = useState("");
 
@@ -41,7 +41,7 @@ function UserList() {
       ]);
       dataArray.forEach((e) => {
         e[1].isOnline === true &&
-          e[1].email !== myUser &&
+          e[1].email !== myUser.email &&
           active.push({
             name: e[1].name,
             email: e[1].email,

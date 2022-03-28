@@ -13,5 +13,5 @@ export const removeFromSession = (key) => {
     sessionStorage.removeItem(key);
 }
 
-// Remove all saved data from sessionStorage
-export const clearSession = () => sessionStorage.clear();
+// // Remove all saved data from sessionStorage
+// export const clearSession = () => sessionStorage.clear();
