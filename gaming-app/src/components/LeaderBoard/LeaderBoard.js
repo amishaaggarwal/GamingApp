@@ -21,8 +21,9 @@ function LeaderBoard() {
       const order = [];
       let res = [];
 
-      let loc = window.location.href;
-      if (Object.keys(obj).length > 0 && loc.search("dashboard") !== -1) {
+      let loc = window.location.href.split("/").slice(-2)[0];
+
+      if (Object.keys(obj).length > 0 && loc!=="dashboard") {
         Object.keys(obj).forEach((row, key) => {
           let games = {};
           obj[row]["gameID"] && Object.values(obj[row]["gameID"]).forEach((u) => {
@@ -44,7 +45,7 @@ function LeaderBoard() {
         Object.keys(obj).forEach((row, key) => {
           let gameScore = 0,
             total = 0;
-          Object.values(obj[row]["gameID"]).forEach((u) => {
+          obj[row]["gameID"] && Object.values(obj[row]["gameID"]).forEach((u) => {
             Object.values(u).forEach((o) => {
               total += "tic-tac" === o.game ? 1 : 0;
               gameScore += "tic-tac" === o.game && o.status === "won" ? 50 : 0;
@@ -58,7 +59,7 @@ function LeaderBoard() {
       res.sort(function (a, b) {
         return b[1] - a[1];
       });
-      loc.search("dashboard") === -1
+      loc==="dashboard"
         ? res.forEach((key) => {
             obj[key[0]].totalScore = key[1];
             obj[key[0]].total_games = key[2];

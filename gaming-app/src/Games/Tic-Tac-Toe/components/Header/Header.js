@@ -7,8 +7,8 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import "./Header.scss";
 import React from "react";
+import "./Header.scss";
 
 function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);

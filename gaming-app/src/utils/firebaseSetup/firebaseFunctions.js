@@ -64,6 +64,7 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
                 total_games: newval + 1,
               });
             });
+            updateFireBase("GameID", newKey, "total_games_played_by", 1);
           }
           break;
         case "scoreCredit":
@@ -75,6 +76,7 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
                 totalScore: newval + value,
               });
             });
+            updateFireBase("GameID", newKey, "total_wins", 1);
           }
           break;
         default:

@@ -1,12 +1,12 @@
 import { Box, Button, Stack } from "@mui/material";
+import LeaderBoard from "components/LeaderBoard/LeaderBoard";
+import UserList from "components/UserList/UserList";
 import { child, onValue, push, ref } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
 import { db, gameListRef } from "utils/firebaseSetup/FirebaseSetup";
 import { getSessionStorage, setSessionStorage } from "utils/Storage/SessionStorage";
-import LeaderBoard from "../../components/LeaderBoard/LeaderBoard";
-import UserList from "components/UserList/UserList";
 import "./ModeSelect.scss";
 
 function ModeSelect(props) {
