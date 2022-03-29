@@ -21,9 +21,6 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
         case "players":
           update(ref(db, `${endpoint}/${newKey}`), { players: value });
           break;
-        case "moveNow":
-          update(ref(db, `${endpoint}/${newKey}`), { moveNow: value });
-          break;
         case "lastMove":
           update(ref(db, `${endpoint}/${newKey}`), { lastMove: value });
           break;

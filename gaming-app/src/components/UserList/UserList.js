@@ -45,6 +45,7 @@ function UserList() {
           active.push({
             name: e[1].name,
             email: e[1].email,
+            dp:e[1].dp,
           });
       });
       setActiveUsers(active);
@@ -126,7 +127,7 @@ function UserList() {
                   <ListItemAvatar>
                     <Avatar
                       alt={`Avatar n°${actUser.name + 1}`}
-                      src={`/static/images/avatar/${actUser.name + 1}.jpg`}
+                      src={`${actUser.dp}`}
                     />
                   </ListItemAvatar>
                   <ListItemText id={labelId} primary={` ${actUser.name}`} />

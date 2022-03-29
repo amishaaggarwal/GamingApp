@@ -5,13 +5,12 @@ import {
   CELL_OCCUPIED,
   DRAW,
   LOST,
-  NOT_YOUR_TURN
+  NOT_YOUR_TURN,
 } from "constants/notification-constants";
 import { onValue, ref } from "firebase/database";
 import React, { useCallback, useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import Modal from "react-modal";
-import { useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
@@ -45,13 +44,11 @@ function Multiplayer() {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [drawModalIsOpen, setDrawIsOpen] = useState(false);
   const [lostModalIsOpen, setLostModalIsOpen] = useState(false);
-  const myUser = JSON.parse(getSessionStorage());
-  const { newKey } = useParams();
-  const play = useLocation();
-  let mydata = play.state;
-  const [users, setUsers] = useState(mydata.players);
-  const [currentState, setCurrentState] = useState(mydata.gamestate);
-  const [moveNow, setMoveNow] = useState(mydata.moveNow);
+  const myUser = JSON.parse(getSessionStorage("user")).email;
+  const newKey = getSessionStorage("key");
+  const [users, setUsers] = useState({});
+  const [currentState, setCurrentState] = useState(initialState);
+  const [moveNow, setMoveNow] = useState(CROSS);
 
   //-opens winner modal
   const openWinModal = useCallback(() => {
@@ -97,15 +94,15 @@ function Multiplayer() {
         ) {
           openLoseModal();
           updateFireBase("UserList", myUser, "scoreCredit", 0);
-          updateFireBase("UserList", myUser, "gameID", {
-            obj: { status: "lost", score: 0, game: "tic-tac" },
+          updateFireBase("GameID", myUser, "gameSessionList", {
+            obj: { status: "lost", score: 0 },
             gameid: newKey,
           });
         } else {
           openWinModal();
           updateFireBase("UserList", myUser, "scoreCredit", 50);
-          updateFireBase("UserList", myUser, "gameID", {
-            obj: { status: "won", score: 1, game: "tic-tac" },
+          updateFireBase("GameID", myUser, "gameSessionList", {
+            obj: { status: "won", score: 1 },
             gameid: newKey,
           });
         }
@@ -113,8 +110,8 @@ function Multiplayer() {
         updateFireBase("GameSession", newKey, "draw", true);
         openDrawModal();
         updateFireBase("UserList", myUser, "scoreCredit", 0);
-        updateFireBase("UserList", myUser, "gameID", {
-          obj: { status: "draw", score: 0, game: "tic-tac" },
+        updateFireBase("GameID", myUser, "gameSessionList", {
+          obj: { status: "draw", score: 0 },
           gameid: newKey,
         });
       }
@@ -161,7 +158,21 @@ function Multiplayer() {
           won = mygrid[a];
           updateFireBase("GameSession", newKey, "winner", won);
           updateFireBase("UserList", users.player1.email, "total_games", 1);
+          updateFireBase("GameID", "tic-tac", "total_games", 1);
+          updateFireBase(
+            "GameID",
+            users.player1.email,
+            "total_games_played_by",
+            1
+          );
           updateFireBase("UserList", users.player2.email, "total_games", 1);
+          updateFireBase("GameID", "tic-tac", "total_games", 1);
+          updateFireBase(
+            "GameID",
+            users.player2.email,
+            "total_games_played_by",
+            1
+          );
           break;
         }
       }
@@ -329,7 +340,7 @@ function Multiplayer() {
         className="winning-modal"
         overlayClassName="modal-overlay"
       >
-        <WinningScreen winnerIs={won} multi={play.state.players} />
+        <WinningScreen winnerIs={won} multi={users} />
         <Stack direction="row" spacing={2} className="button-row">
           <Button
             onClick={closeWinModal}

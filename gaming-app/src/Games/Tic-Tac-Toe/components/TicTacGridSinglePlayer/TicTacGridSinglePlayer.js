@@ -108,6 +108,14 @@ function TicTacGridSinglePlayer(props) {
             obj: { status: "lost", score: 0 },
             gameid: key,
           });
+          updateFireBase("UserList", users.player1.email, "total_games", 1);
+          updateFireBase("GameID", "tic-tac", "total_games", 1);
+          updateFireBase(
+            "GameID",
+            users.player1.email,
+            "total_games_played_by",
+            1
+          );
         } else {
           openWinModal();
           updateFireBase("UserList", users.player1.email, "scoreCredit", 50);
@@ -115,7 +123,14 @@ function TicTacGridSinglePlayer(props) {
             obj: { status: "won", score: 1 },
             gameid: key,
           });
-          
+          updateFireBase("UserList", users.player1.email, "total_games", 1);
+          updateFireBase("GameID", "tic-tac", "total_games", 1);
+          updateFireBase(
+            "GameID",
+            users.player1.email,
+            "total_games_played_by",
+            1
+          );
         }
       } else if (count === 0) {
         updateFireBase("GameSession", key, "draw", true);
@@ -125,13 +140,21 @@ function TicTacGridSinglePlayer(props) {
           obj: { status: "draw", score: 0 },
           gameid: key,
         });
+        updateFireBase("UserList", users.player1.email, "total_games", 1);
+        updateFireBase("GameID", "tic-tac", "total_games", 1);
+        updateFireBase(
+          "GameID",
+          users.player1.email,
+          "total_games_played_by",
+          1
+        );
       }
     },
     [
       count,
       myUser,
-      users.player1.email,
       key,
+      users.player1.email,
       openDrawModal,
       openWinModal,
       openLoseModal,
@@ -178,12 +201,12 @@ function TicTacGridSinglePlayer(props) {
         if (mygrid[a] && mygrid[a] === mygrid[b] && mygrid[a] === mygrid[c]) {
           won = mygrid[a];
           updateFireBase("GameSession", key, "winner", won);
-          updateFireBase("UserList", users.player1.email, "total_games", 1);
+          
           break;
         }
       }
     },
-    [key, users.player1.email]
+    [key]
   );
 
   //-checks if the grid cell is empty
@@ -286,7 +309,9 @@ function TicTacGridSinglePlayer(props) {
   return (
     <div>
       <div>
-        <span className="move-text">{moveNow === CROSS ?"Your Move!":"Computer's Move!"}</span>
+        <span className="move-text">
+          {moveNow === CROSS ? "Your Move!" : "Computer's Move!"}
+        </span>
       </div>
       <div className="tic-tac-grid">
         <div className="tic-tac-row ">

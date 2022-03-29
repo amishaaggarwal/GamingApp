@@ -64,7 +64,7 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
                 total_games: newval + 1,
               });
             });
-            updateFireBase("GameID", newKey, "total_games_played_by", 1);
+           
           }
           break;
         case "scoreCredit":
@@ -106,6 +106,7 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
           }
           break;
         case "total_wins":
+           newKey = newKey.replace(/[^a-zA-Z/\d]/g, "");
           readFireBase("GameID", `tic-tac/users/${newKey}/total_wins`).then(
             (res) => {
               let newval = res ? parseInt(res) : 0;
@@ -119,6 +120,7 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
           break;
         case "total_games_played_by":
           {
+             newKey = newKey.replace(/[^a-zA-Z/\d]/g, "");
             let newval;
             readFireBase(
               "GameID",
@@ -132,13 +134,13 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
           }
           break;
         case "total_games":
+           newKey = newKey.replace(/[^a-zA-Z/\d]/g, "");
           readFireBase("GameID", `tic-tac/total_games`).then((res) => {
             let newval = res ? parseInt(res) : 0;
             update(ref(db, `${endpoint}/${newKey}`), {
               total_games: newval + 1,
             });
           });
-
           break;
         default:
           break;
