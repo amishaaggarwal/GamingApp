@@ -6,7 +6,6 @@ import { getFromSession } from "Games/Ping-Pong/util/storage/sessionStorage";
 import { updateFirebase } from "Games/Ping-Pong/Firebase/updateFirebase";
 import { getSessionStorage } from "utils/Storage/SessionStorage";
 import { toast } from "react-toastify";
-import { uid } from "uid";
 import "./WinningScreen.scss";
 
 function WinningScreen(props) {
@@ -16,7 +15,7 @@ function WinningScreen(props) {
   const [winner, setWinner] = useState("");
   const [player1_score, setPlayer1_score] = useState("");
   const [player2_score, setPlayer2_score] = useState("");
-  const [uId, setUid] = useState("");
+  const uId = getSessionStorage('singleplayGameId'); 
   // const { state } = useLocation();
   // let preGameId = state.gameId;
   // let winner = state.winPlayer;
@@ -35,20 +34,22 @@ function WinningScreen(props) {
     setWinner(props.winner);
     setPlayer1_score(props.player1_score);
     setPlayer2_score(props.player2_score);
-    setUid(uid());
     return () => {};
   }, [props.mode, props.winner, props.player1_score, props.player2_score]);
 
+ 
   useEffect(() => {
     fireConfetti();
     if (mode === "singleplayer") {
       updateFirebase("UserList", user.email, "scoreCredit", 1);
       updateFirebase("UserList", user.email, "total_games", 1);
-      updateFirebase("GameId", uId, "gameSessionList", "");
-      updateFirebase("GameId", uId, "total_wins", 1);
-      updateFirebase("GameId", uId, "total_games_played_by", "");
-      updateFirebase("GameId", uId, "total_games", 1);
-    
+      updateFirebase("GameID", user.email, "gameSessionList", {
+        obj: { status: "won", score: 50 },
+        gameid: uId,
+      });
+      updateFirebase("GameID", user.email, "total_wins", 1);
+      updateFirebase("GameID", user.email, "total_games_played_by", "");
+      updateFirebase("GameID", 'ping-pong', "total_games", 1);
     } else {
     }
   }, [
@@ -88,7 +89,9 @@ function WinningScreen(props) {
           >
             Play Again
           </Button>
-          <Button className="back">Back</Button>
+          <Button className="back" onClick={() => props.parentCallback("back")}>
+            Back
+          </Button>
         </div>
       </div>
     </>

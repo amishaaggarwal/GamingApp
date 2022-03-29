@@ -63,6 +63,8 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
             });
             break;
         }
+        break;
+         
       case "Invites":
         {
           console.log("here");
@@ -94,10 +96,14 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
       default:
         break;
       case "GameID":
+       
+        console.log(newId);
         switch (keys) {
+          
           case "gameSessionList":
             {
               let newval;
+              newId = newId.replace(/[^a-zA-Z/\d]/g, "");
               getExistingPlayerData(
                 "GameID",
                 `ping-pong/users/${newId}/gameSessions`
@@ -117,6 +123,7 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
             }
             break;
           case "total_wins":
+            newId = newId.replace(/[^a-zA-Z/\d]/g, "");
             getExistingPlayerData("GameID", `ping-pong/users/${newId}/total_wins`).then(
               (res) => {
                 let newval = res ? parseInt(res) : 0;
@@ -131,6 +138,7 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
           case "total_games_played_by":
             {
               let newval;
+              newId = newId.replace(/[^a-zA-Z/\d]/g, "");
               getExistingPlayerData(
                 "GameID",
                 `users/${newId}/total_games_played_by`
@@ -154,9 +162,10 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
           default:
             break;
         }
+        break;
       case "UserList":
         console.log(newId);
-        let newId = newId.replace(/[^a-zA-Z/\d]/g, "");
+        newId = newId.replace(/[^a-zA-Z/\d]/g, "");
         switch (keys) {
           case "name":
             update(ref(db, `${endpoint}/${newId}`), { name: value });
