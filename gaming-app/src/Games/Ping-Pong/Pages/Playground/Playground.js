@@ -1,16 +1,26 @@
 
-import React, {useState} from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Singleplayer from '../../components/Playscreen/singleplayer/Singleplayer';
 import Multiplayer from "../../components/Playscreen/multiplayer/Multiplayer";
 import Startscreen from '../../components/Startscreen/Startscreen'
 import DrawerLeft from 'components/DrawerLeft/DrawerLeft';
+import Notification from 'components/Notification/Notification';
 import { uid } from "uid";
 import { setSessionStorage } from 'utils/Storage/SessionStorage';
 import './Playground.scss'
-
+import { toMultiplayer } from 'App'
 
 function Playground() {
     const [toHere, setToHere] = useState('');
+    const { isMulti, setIsmulti } = useContext(toMultiplayer);
+
+    
+    useEffect(() => {
+      console.log('ayaa');
+      if(isMulti) setToHere('multiplayer');    
+    }, [isMulti])
+    
+
 
     const switchMode = (param) => {
         switch (param) {
@@ -29,9 +39,10 @@ function Playground() {
     };
 
     return (
-      <div className='Playground'>
+      <div className="Playground">
         {switchMode(toHere)}
-        <DrawerLeft />
+        <DrawerLeft parentCallback={handleCallback} />
+        <Notification parentCallback={handleCallback} />
       </div>
     );
 }
