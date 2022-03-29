@@ -75,7 +75,7 @@ function UserList() {
     setRequestId(key);
     setSessionStorage("sessionId", key);
     updateFireBase("Invites", key, "request_status", "pending");
-    updateFireBase("Invites", key, "from", myUser);
+    updateFireBase("Invites", key, "from", myUser.email);
     updateFireBase("Invites", key, "to", actUserEmail);
     updateFireBase("Invites", key, "game", "tic-tac");
     updateFireBase("Invites", key, "requestId", key);
@@ -84,7 +84,7 @@ function UserList() {
 
   const cancelRequest = () => {
     updateFireBase("Invites", requestId, "request_status", "cancel");
-    updateFireBase("Invites", requestId, "from", myUser);
+    updateFireBase("Invites", requestId, "from", myUser.email);
     updateFireBase("Invites", requestId, "to", "");
     closeModal();
   };

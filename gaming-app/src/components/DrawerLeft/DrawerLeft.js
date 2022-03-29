@@ -1,3 +1,4 @@
+import Notification from "components/Notification/Notification";
 import { onDisconnect, ref } from "firebase/database";
 import React, { useEffect } from "react";
 import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
@@ -13,7 +14,11 @@ function DrawerLeft() {
     onDisconnect(ref(db, `UserList/${myUser}/isOnline`)).set(false);
   }, [myUser]);
 
-  return <div></div>;
+  return (
+    <div>
+      <Notification />
+    </div>
+  );
 }
 
 export default DrawerLeft;
