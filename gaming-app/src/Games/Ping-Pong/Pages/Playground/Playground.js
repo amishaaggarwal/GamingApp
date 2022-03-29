@@ -4,6 +4,9 @@ import Singleplayer from '../../components/Playscreen/singleplayer/Singleplayer'
 import Multiplayer from "../../components/Playscreen/multiplayer/Multiplayer";
 import Startscreen from '../../components/Startscreen/Startscreen'
 import DrawerLeft from 'components/DrawerLeft/DrawerLeft';
+import { uid } from "uid";
+import { setSessionStorage } from 'utils/Storage/SessionStorage';
+import './Playground.scss'
 
 
 function Playground() {
@@ -12,9 +15,10 @@ function Playground() {
     const switchMode = (param) => {
         switch (param) {
           case "singleplayer":
+            setSessionStorage('singleplayGameId', uid());
             return <Singleplayer parentCallback={handleCallback} />;
           case "multiplayer":
-            return <Multiplayer gameSessionId={'123456789'} parentCallback={handleCallback} />;
+            return <Multiplayer  parentCallback={handleCallback} />;
           default:
             return <Startscreen parentCallback={handleCallback} />;
         }
@@ -25,10 +29,10 @@ function Playground() {
     };
 
     return (
-      <>
+      <div className='Playground'>
         {switchMode(toHere)}
         <DrawerLeft />
-      </>
+      </div>
     );
 }
 

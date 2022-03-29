@@ -43,6 +43,9 @@ function Singleplayer(props) {
   let deficulty;
 
   const setWinnerName = (val) => {
+    if(val === 'back') {
+      props.parentCallback('');
+    }
     setWinner(val);
   }
   const navigate = useNavigate();
@@ -254,7 +257,7 @@ function Singleplayer(props) {
         wHeight / 1.5,
         wHeight / 7.5,
         ballY,
-        miss
+        0
       );
     }
   };

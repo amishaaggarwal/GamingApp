@@ -12,8 +12,8 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { setInSession } from "Games/Ping-Pong/util/storage/sessionStorage";
 import LeaderBoard from "Games/Ping-Pong/components/leaderboard/LeaderBoard";
 import { toast } from "react-toastify";
-import Notification from "Games/Ping-Pong/components/Notification/Notification";
-import UserList from "Games/Ping-Pong/components/UserList/UserList";
+import Notification from "components/Notification/Notification";
+import UserList from "components/UserList/UserList";
 
 function Startscreen(props) {
   const [open, setOpen] = useState(false);
@@ -130,7 +130,7 @@ function Startscreen(props) {
         // props.parentCallback("multiplayer");  
         break;
       default:
-        props.parentCallback("/");
+        props.parentCallback("");
     }
   };
  
