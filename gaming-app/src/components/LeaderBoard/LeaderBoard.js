@@ -61,22 +61,22 @@ function LeaderBoard() {
           });
         });
       });
-      res.sort(function (a, b) {
+      res.sort((a, b)=> {
         return b[1] - a[1];
       });
-      res.map((d)=>console.log(d))
+      
       console.log(res);
     }
 
-    console.log(loc !== "dashboard", res,res.length,typeof res);
+    console.log(loc !== "dashboard", res, res.length, typeof res);
     loc !== "dashboard"
       ? res.forEach((key) => {
           // obj[key[0]].totalScore = key[1];
           // obj[key[0]].total_games = key[2];
           order.push(key[0]);
         })
-      : res.map((d) => 
-          console.log(d)
+      : res.map(
+          (d) => console.log(d)
           // key[0].games_played = Object.values(key[2]);
           // order.push(key[0]);
         );
