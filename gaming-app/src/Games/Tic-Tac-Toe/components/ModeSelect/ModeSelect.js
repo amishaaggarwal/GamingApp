@@ -6,9 +6,12 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
 import { db, gameListRef } from "utils/firebaseSetup/FirebaseSetup";
-import { getSessionStorage, setSessionStorage } from "utils/Storage/SessionStorage";
-import "./ModeSelect.scss";
+import {
+  getSessionStorage,
+  setSessionStorage
+} from "utils/Storage/SessionStorage";
 
+//-Selects mode and sends invite
 function ModeSelect(props) {
   const [open, setOpen] = useState(false);
   const [acceptRequest, setAcceptRequest] = useState(false);

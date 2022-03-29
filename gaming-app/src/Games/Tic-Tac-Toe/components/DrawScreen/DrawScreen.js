@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function DrawScreen(props) {
-  return (
-      <div className='zoom-in button-row'>{props.msg}</div>
-  )
+  return <div className="zoom-in button-row">{props.msg}</div>;
 }
 
-export default DrawScreen
+export default DrawScreen;

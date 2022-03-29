@@ -22,15 +22,16 @@ function Notification() {
 
       request &&
         Object.values(request).forEach((invite, i) => {
-          if (invite.to === myUser.email && invite.request_status === "pending") {
+          if (
+            invite.to === myUser.email &&
+            invite.request_status === "pending"
+          ) {
             setOpen(true);
             setGame(invite.game);
             setSender(invite.from);
             setRequestId(invite.requestId);
-          } else if (invite.request_status === "accept")
-          {
-            
-            }
+          } else if (invite.request_status === "accept") {
+          }
         });
     });
   }, [myUser, requestId]);

@@ -1,5 +1,5 @@
 import { child, get, ref, update } from "firebase/database";
-import { db } from "./FirebaseSetup";
+import { db } from "utils/firebaseSetup/FirebaseSetup";
 
 //-function for reading firebase data
 export const readFireBase = async (endpoint, path) => {

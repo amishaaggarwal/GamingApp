@@ -12,7 +12,7 @@ import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { db, gameListRef } from "utils/firebaseSetup/FirebaseSetup";
 import {
   getSessionStorage,
-  setSessionStorage,
+  setSessionStorage
 } from "utils/Storage/SessionStorage";
 import "./UserList.scss";
 

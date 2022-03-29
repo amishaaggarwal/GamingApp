@@ -201,7 +201,7 @@ function TicTacGridSinglePlayer(props) {
         if (mygrid[a] && mygrid[a] === mygrid[b] && mygrid[a] === mygrid[c]) {
           won = mygrid[a];
           updateFireBase("GameSession", key, "winner", won);
-          
+
           break;
         }
       }

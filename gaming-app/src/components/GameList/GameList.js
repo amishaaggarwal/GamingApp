@@ -8,18 +8,19 @@ import pp from "../../assets/images/pp.jpg";
 import tt from "../../assets/images/tt.jpeg";
 import "./GameList.scss";
 
+//-Displays the list of games on dashboard in the form of icons
 function GameList() {
   const navigate = useNavigate();
   const itemData = [
     {
       img: tt,
       title: "Tic Tac Toe",
-      path:"tic-tac",
+      path: "tic-tac",
     },
     {
       img: pp,
       title: "Ping Pong",
-      path:"ping-pong",
+      path: "ping-pong",
     },
   ];
   return (

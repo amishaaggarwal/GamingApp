@@ -1,15 +1,14 @@
+import MailIcon from "@mui/icons-material/Mail";
 import { Fab, Stack } from "@mui/material";
+import DrawerLeft from "components/DrawerLeft/DrawerLeft";
 import GameList from "components/GameList/GameList";
+import GameSlider from "components/gameSlider/GameSlider";
 import Header from "components/Header/Header";
 import LeaderBoard from "components/LeaderBoard/LeaderBoard";
-import MailIcon from "@mui/icons-material/Mail";
+import Notification from "components/Notification/Notification";
+import UserList from "components/UserList/UserList";
 import React from "react";
 import "./DashBoard.scss";
-import UserList from "components/UserList/UserList";
-import GameSlider from "components/gameSlider/GameSlider";
-import Notification from "components/Notification/Notification";
-import DrawerLeft from "components/DrawerLeft/DrawerLeft";
-
 
 function DashBoard() {
   const fabStyle = {
@@ -20,8 +19,8 @@ function DashBoard() {
   };
   return (
     <>
-      <DrawerLeft/>
-      <Notification/>
+      <DrawerLeft />
+      <Notification />
       <Stack spacing={1} className="dashboard">
         <Header />
         <div direction="row" spacing={1} className="center-body">

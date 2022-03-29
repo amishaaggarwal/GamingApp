@@ -13,7 +13,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile,
+  updateProfile
 } from "firebase/auth";
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -22,7 +22,7 @@ import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { auth } from "utils/firebaseSetup/FirebaseSetup";
 import {
   getSessionStorage,
-  setSessionStorage,
+  setSessionStorage
 } from "utils/Storage/SessionStorage";
 import "./Login.scss";
 

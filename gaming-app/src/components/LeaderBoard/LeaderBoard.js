@@ -7,20 +7,20 @@ import ticTac from "../../constants/game-logos/tic-tac.ico";
 import "./LeaderBoard.scss";
 import LeaderBoardSkeleton from "./LeaderBoardSkeleton";
 
+const logos = {
+  "ping-pong": pingPong,
+  "tic-tac": ticTac,
+};
 function LeaderBoard() {
   const [leaderBoard, setLeaderBoard] = useState([]);
   const [userlist, setUserlist] = useState([]);
   const [gameid, setGameid] = useState([]);
   const [rankNo, setRankNo] = useState(null);
-  const [logos, setLogos] = useState({
-    "ping-pong": pingPong,
-    "tic-tac": ticTac,
-  });
 
+  //-Function identifies if the user is on dashboard or on any game and displays leaderboard accordingly
   const identifyLevel = useCallback(() => {
     const order = [];
     let res = [];
-
     let loc = window.location.href.split("/").slice(-2)[0];
 
     //-Dashboard level
@@ -63,6 +63,7 @@ function LeaderBoard() {
     res.sort((a, b) => {
       return b[1] - a[1];
     });
+    //-Adds games_played field if on dashboard level otherwise changes game level data
     if (loc !== "dashboard") {
       res.forEach((d) => {
         d[0].games_played = Object.values(d[2]);
@@ -76,8 +77,9 @@ function LeaderBoard() {
       });
     }
     return order;
-  }, [logos, userlist, gameid]);
+  }, [userlist, gameid]);
 
+  //-Reads data from firebase onmount to avoid delay
   useEffect(() => {
     readFireBase("UserList", "").then((res) => {
       setUserlist(res);
@@ -87,8 +89,13 @@ function LeaderBoard() {
     });
   }, []);
 
+  //-Sets leaderboard data 
   useEffect(() => {
     setLeaderBoard(identifyLevel());
+
+    return () => {
+      setLeaderBoard([]);
+    }
   }, [identifyLevel]);
 
   return (
