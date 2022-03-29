@@ -1,12 +1,11 @@
-import { Box, Stack } from "@mui/material";
 import StarRateIcon from "@mui/icons-material/StarRate";
-import "./LeaderBoard.scss";
+import { Box, Stack, Tooltip } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { readFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import pingPong from "../../constants/game-logos/ping-pong.jpeg";
 import ticTac from "../../constants/game-logos/tic-tac.ico";
+import "./LeaderBoard.scss";
 import LeaderBoardSkeleton from "./LeaderBoardSkeleton";
-import { Tooltip } from "@mui/material";
 
 function LeaderBoard() {
   const [leaderBoard, setLeaderBoard] = useState([]);
@@ -48,7 +47,6 @@ function LeaderBoard() {
       let gameName = window.location.href.split("/").slice(-2)[1];
 
       Object.keys(userlist).forEach((row) => {
-        // console.log(gameid[gameName].users[row]);
         if (
           gameid[gameName] &&
           gameid[gameName].users &&

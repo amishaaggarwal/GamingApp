@@ -26,6 +26,14 @@ import {
 } from "utils/Storage/SessionStorage";
 import "./Login.scss";
 
+export const logout = async () => {
+  await signOut(auth);
+  toast.warn("You logged out of Game Dashboard!", {
+    theme: "dark",
+    position: "bottom-center",
+  });
+};
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,9 +42,11 @@ export default function Login() {
   const [isLoginPage, setIsLoginPage] = useState(true);
   const navigate = useNavigate();
   const myUser = JSON.parse(getSessionStorage("user"));
+
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
   });
+
   const register = async () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
@@ -87,14 +97,6 @@ export default function Login() {
       });
     }
   };
-
-  // const logout = async () => {
-  //   await signOut(auth);
-  //   toast.warn("you logged out to game dashboard", {
-  //     theme: "dark",
-  //     position: "bottom-center",
-  //   });
-  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -193,7 +195,6 @@ export default function Login() {
                 )}
                 <label className="input-label">Email</label>
                 <TextField
-                  id="standard-basic"
                   className="input-text"
                   type="email"
                   value={email}
@@ -201,7 +202,6 @@ export default function Login() {
                 />
                 <label className="input-label">Password</label>
                 <TextField
-                  id="standard-basic"
                   className="input-text"
                   type="password"
                   value={password}

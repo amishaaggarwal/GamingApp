@@ -1,18 +1,30 @@
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { Tooltip } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import "./Header.scss";
+import { logout } from "pages/Login/Login";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { clearSessionStorage } from "utils/Storage/SessionStorage";
+import "./Header.scss";
 
 function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    logout();
+    clearSessionStorage();
+    navigate("/");
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -79,6 +91,20 @@ function Header() {
           >
             <MoreIcon />
           </IconButton>
+        </Box>
+        <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          <Tooltip title="Logout">
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleLogout}
+              color="inherit"
+            >
+              <LogoutIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
       </Toolbar>
     </AppBar>
