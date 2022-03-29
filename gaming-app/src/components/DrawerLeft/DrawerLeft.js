@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
 import { getSessionStorage } from "utils/Storage/SessionStorage";
-import "./DrawerLeft.scss";
 
 function DrawerLeft() {
   let myUser = JSON.parse(getSessionStorage("user"));

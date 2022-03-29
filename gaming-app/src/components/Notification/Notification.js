@@ -11,7 +11,7 @@ import { getSessionStorage } from "utils/Storage/SessionStorage";
 function Notification() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const myUser = getSessionStorage("user");
+  const myUser = JSON.parse(getSessionStorage("user"));
   const [requestId, setRequestId] = useState("");
   const [sender, setSender] = useState("");
   const [game, setGame] = useState("");
@@ -21,13 +21,16 @@ function Notification() {
       const request = data.val();
 
       request &&
-        Object.values(request).map((invite, i) => {
-          if (invite.to === myUser && invite.request_status === "pending") {
+        Object.values(request).forEach((invite, i) => {
+          if (invite.to === myUser.email && invite.request_status === "pending") {
             setOpen(true);
             setGame(invite.game);
             setSender(invite.from);
             setRequestId(invite.requestId);
-          }
+          } else if (invite.request_status === "accept")
+          {
+            
+            }
         });
     });
   }, [myUser, requestId]);

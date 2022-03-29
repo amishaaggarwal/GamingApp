@@ -14,7 +14,7 @@ function GameList() {
     {
       img: tt,
       title: "Tic Tac Toe",
-      path:"tic-tac-toe",
+      path:"tic-tac",
     },
     {
       img: pp,

@@ -16,69 +16,76 @@ function LeaderBoard() {
     "tic-tac": ticTac,
   });
 
-  const identifyLevel = useCallback(
-    (obj) => {
-      const order = [];
-      let res = [];
+  const identifyLevel = useCallback(() => {
+    const order = [];
+    let res = [];
 
-      let loc = window.location.href.split("/").slice(-2)[0];
+    let loc = window.location.href.split("/").slice(-2)[0];
 
-      if (Object.keys(obj).length > 0 && loc!=="dashboard") {
+    //-Dashboard level
+    if (loc !== "dashboard") {
+      readFireBase("UserList", ``).then((obj) => {
         Object.keys(obj).forEach((row, key) => {
           let games = {};
-          obj[row]["gameID"] && Object.values(obj[row]["gameID"]).forEach((u) => {
-            u && Object.values(u).forEach((o) => {
-              let data = {};
-              games[o.game] = {};
-              data["total"] = games[o.game].total ? games[o.game].total + 1 : 1;
-              data["gname"] = o.game;
-              data["logo"] = logos[o.game];
-              games[o.game] = data;
+
+          readFireBase(`GameID/`);
+          obj[row]["totalScore"] &&
+            Object.values(obj[row]["gameID"]).forEach((u) => {
+              u &&
+                Object.values(u).forEach((o) => {
+                  let data = {};
+                  games[o.game] = {};
+                  data["total"] = games[o.game].total
+                    ? games[o.game].total + 1
+                    : 1;
+                  data["gname"] = o.game;
+                  data["logo"] = logos[o.game];
+                  games[o.game] = data;
+                });
             });
-          });
           res.push([row, obj[row]["totalScore"], games]);
         });
-      } else if (
-        Object.keys(obj).length > 0 &&
-        loc.search("dashboard") === -1
-      ) {
-        Object.keys(obj).forEach((row, key) => {
-          let gameScore = 0,
-            total = 0;
-          obj[row]["gameID"] && Object.values(obj[row]["gameID"]).forEach((u) => {
-            Object.values(u).forEach((o) => {
-              total += "tic-tac" === o.game ? 1 : 0;
-              gameScore += "tic-tac" === o.game && o.status === "won" ? 50 : 0;
-            });
+      });
+    } else if (loc === "dashboard") {
+      let gameName = window.location.href.split("/").slice(-2)[1];
+      readFireBase(`GameID`, `/${gameName}/users`).then((obj) => {
+        console.log(obj);
+        Object.keys(obj).forEach((row) => {
+          let gameScore = obj[row].total_games_played_by,
+            total = obj[row].total_wins * 50,
+            u_data = {};
+          readFireBase("UserList", `${row}`).then((data) => {
+            u_data = data;
+            console.log(u_data, gameScore, total);
+            res.push([u_data, gameScore, total]);
           });
-
-          res.push([row, gameScore, total]);
         });
-      }
-
+      });
       res.sort(function (a, b) {
         return b[1] - a[1];
       });
-      loc==="dashboard"
-        ? res.forEach((key) => {
-            obj[key[0]].totalScore = key[1];
-            obj[key[0]].total_games = key[2];
-            order.push(obj[key[0]]);
-          })
-        : res.forEach((key) => {
-            obj[key[0]].games_played = Object.values(key[2]);
-            order.push(obj[key[0]]);
-          });
+      res.map((d)=>console.log(d))
+      console.log(res);
+    }
 
-      return order;
-    },
-    [logos]
-  );
+    console.log(loc !== "dashboard", res,res.length,typeof res);
+    loc !== "dashboard"
+      ? res.forEach((key) => {
+          // obj[key[0]].totalScore = key[1];
+          // obj[key[0]].total_games = key[2];
+          order.push(key[0]);
+        })
+      : res.map((d) => 
+          console.log(d)
+          // key[0].games_played = Object.values(key[2]);
+          // order.push(key[0]);
+        );
+    console.log(order);
+    return order;
+  }, [logos]);
 
   useEffect(() => {
-    readFireBase("UserList", ``).then((res) => {
-      setLeaderBoard(res ? identifyLevel(res) : []);
-    });
+    setLeaderBoard(identifyLevel());
   }, [identifyLevel]);
 
   return (

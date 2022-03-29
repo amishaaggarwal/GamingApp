@@ -12,7 +12,7 @@ import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { db, gameListRef } from "utils/firebaseSetup/FirebaseSetup";
 import {
   getSessionStorage,
-  setSessionStorage
+  setSessionStorage,
 } from "utils/Storage/SessionStorage";
 import "./UserList.scss";
 
@@ -45,7 +45,7 @@ function UserList() {
           active.push({
             name: e[1].name,
             email: e[1].email,
-            dp:e[1].dp,
+            dp: e[1].dp,
           });
       });
       setActiveUsers(active);
