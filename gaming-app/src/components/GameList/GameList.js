@@ -41,7 +41,7 @@ function GameList(props) {
   useEffect(() => {
 
     if (props.thisOne) {
-      openModal();
+      // openModal();
     }
   }, [props.thisOne]);
 
