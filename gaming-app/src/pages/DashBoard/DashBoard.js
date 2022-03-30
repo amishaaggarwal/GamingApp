@@ -6,18 +6,11 @@ import GameList from "components/GameList/GameList";
 import GameSlider from "components/gameSlider/GameSlider";
 import Header from "components/Header/Header";
 import LeaderBoard from "components/LeaderBoard/LeaderBoard";
-
-import React, { useContext, useState, useEffect } from "react";
-import "./DashBoard.scss";
-import UserList from "components/UserList/UserList";
 import Notification from "components/Notification/Notification";
-import { toMultiplayer } from "App";
+import UserList from "components/UserList/UserList";
+import React, { useContext, useEffect, useState } from "react";
+import "./DashBoard.scss";
 
-
-// export const toMultiplayer = React.createContext({
-//   isMulti: false,
-//   setIsMulti: () => {}
-// });
 
 function DashBoard() {
   const [chooseGame, setchooseGame] = useState(false);
