@@ -16,7 +16,7 @@ function Playground() {
 
     
     useEffect(() => {
-      console.log('ayaa');
+      console.log('in playground');
       if(isMulti) setToHere('multiplayer');    
     }, [isMulti])
     

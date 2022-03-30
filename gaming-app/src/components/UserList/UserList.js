@@ -12,8 +12,9 @@ import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { db, gameListRef } from "utils/firebaseSetup/FirebaseSetup";
 import {
   getSessionStorage,
-  setSessionStorage
+  setSessionStorage,
 } from "utils/Storage/SessionStorage";
+import { toast } from "react-toastify";
 import "./UserList.scss";
 
 function UserList() {
@@ -21,6 +22,7 @@ function UserList() {
   const myUser = JSON.parse(getSessionStorage("user"));
   const [open, setOpen] = useState(false);
   const [requestId, setRequestId] = useState("");
+  const requestKey = getSessionStorage("sessionId");
 
   //-opens lost modal
   const openModal = () => {
@@ -31,6 +33,29 @@ function UserList() {
   const closeModal = () => {
     setOpen(false);
   };
+
+  let gameName = window.location.href.split("/").slice(-1)[0];
+  useEffect(() => {
+    onValue(ref(db, `Invites`), (data) => {
+      const request = data.val();
+
+      request &&
+        Object.values(request).forEach((invite, i) => {
+          if (
+            invite.requestId === requestKey &&
+            invite.from === myUser.email &&
+            invite.request_status === "reject"
+          ) {
+            toast.warn(`${invite.to} denied your game request`, {
+              theme: "dark",
+            });
+            updateFireBase("Invites", requestId, "request_status", "expire");
+
+            closeModal();
+          }
+        });
+    });
+  }, [myUser.email, requestKey, requestId]);
 
   useEffect(() => {
     let active = [];
@@ -77,7 +102,7 @@ function UserList() {
     updateFireBase("Invites", key, "request_status", "pending");
     updateFireBase("Invites", key, "from", myUser.email);
     updateFireBase("Invites", key, "to", actUserEmail);
-    updateFireBase("Invites", key, "game", "tic-tac");
+    updateFireBase("Invites", key, "game", gameName);
     updateFireBase("Invites", key, "requestId", key);
     openModal();
   };

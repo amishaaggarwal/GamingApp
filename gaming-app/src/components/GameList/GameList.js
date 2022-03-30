@@ -9,14 +9,9 @@ import pp from "../../assets/images/pp.jpg";
 import tt from "../../assets/images/tt.jpeg";
 import "./GameList.scss";
 
-<<<<<<< HEAD
 function GameList(props) {
 
   const [open, setOpen] = useState(false);
-=======
-//-Displays the list of games on dashboard in the form of icons
-function GameList() {
->>>>>>> 7071b046f01d808e237e3964122354902f9c790d
   const navigate = useNavigate();
   const itemData = [
     {
@@ -56,7 +51,10 @@ function GameList() {
        {itemData.map((item) => (
          <ImageListItem
            key={item.img}
-           onClick={() => navigate(`${item.path}`)}
+           onClick={() => {
+             navigate(`${item.path}`);
+             closeModal();
+            }}
            sx={{ maxHeight: "200px", width: "200px" }}
          >
            <img
