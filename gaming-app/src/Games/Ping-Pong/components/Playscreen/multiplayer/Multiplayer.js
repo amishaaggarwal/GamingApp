@@ -46,6 +46,50 @@ function Multiplayer(props) {
   let dir = [1, -1];
 
   useEffect(() => {
+
+    // set(ref(db, `Game/${}`), {
+    //       players: {
+    //         player1: {
+    //           // name: !ishared
+    //           //   ? result.user.displayName
+    //           //   : data.players.player1.name,
+    //           // email: !ishared ? result.user.email : data.players.player1.email,
+    //         },
+    //         player2: {
+    //           // name: ishared ? result.user.displayName : "",
+    //           // email: ishared ? result.user.email : "",
+    //         },
+    //       },
+
+    //       gamestate: {
+    //         ball: {
+    //           x: wWidth / 2,
+    //           y: wHeight / 2.15,
+    //         },
+    //         player1_paddle: {
+    //           y: wHeight / 2.5,
+    //         },
+    //         player2_paddle: {
+    //           y: wHeight / 2.5,
+    //         },
+    //         score: {
+    //           player1_score: 0,
+    //           player2_score: 0,
+    //         },
+    //         ballspeed: {
+    //           x: 0,
+    //           y: 0,
+    //         },
+    //       },
+    //       start: false,
+    //       winner: {},
+    //     });
+    return () => {
+    }
+  }, [])
+  
+
+  useEffect(() => {
     onValue(ref(db, `GameSession/${gameSessionId}`), (snapshot) => {
       const data = snapshot.val();
       setPlayer1_Email(data.players.player1.email);
@@ -381,7 +425,8 @@ function Multiplayer(props) {
 
   return (
     <div className="playing-page">
-      <Sketch setup={setup} draw={draw}></Sketch>
+      multiplayer
+      {/* <Sketch setup={setup} draw={draw}></Sketch> */}
     </div>
   );
 }

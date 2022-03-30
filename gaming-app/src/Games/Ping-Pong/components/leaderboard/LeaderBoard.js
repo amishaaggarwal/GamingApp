@@ -2,7 +2,7 @@ import { Box, Stack, Tooltip } from "@mui/material";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import "./LeaderBoard.scss";
 import React, { useCallback, useEffect, useState } from "react";
-import { getExistingPlayerData } from "Games/Ping-Pong/Firebase/updateFirebase";
+import { readFirebase } from "Games/Ping-Pong/Firebase/updateFirebase";
 import pingPong from "../../constants/game-logos/ping-pong.ico";
 import ticTac from "../../constants/game-logos/tic-tac.ico";
 import LeaderBoardSkeleton from "./LeaderBoardSkeleton";
@@ -49,7 +49,8 @@ function LeaderBoard() {
           Object.values(obj[row]["gameID"]).map((u) => {
             Object.values(u).map((o) => {
               total += "ping-pong" === o.game ? 1 : 0;
-              gameScore += "ping-pong" === o.game && o.status === "won" ? 50 : 0;
+              gameScore +=
+                "ping-pong" === o.game && o.status === "won" ? 50 : 0;
             });
           });
 
@@ -77,7 +78,7 @@ function LeaderBoard() {
   );
 
   useEffect(() => {
-    getExistingPlayerData("UserList", ``).then((res) => {
+    readFirebase("UserList", ``).then((res) => {
       setLeaderBoard(res ? identifyLevel(res) : []);
     });
   }, [identifyLevel]);
@@ -148,7 +149,6 @@ function LeaderBoard() {
                   </div>
                 </div>
               </div>
-            
             </Stack>
           ))}
         </Stack>
