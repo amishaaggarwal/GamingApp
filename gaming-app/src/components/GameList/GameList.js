@@ -51,7 +51,10 @@ function GameList(props) {
        {itemData.map((item) => (
          <ImageListItem
            key={item.img}
-           onClick={() => navigate(`${item.path}`)}
+           onClick={() => {
+             navigate(`${item.path}`);
+             closeModal();
+            }}
            sx={{ maxHeight: "200px", width: "200px" }}
          >
            <img

@@ -16,7 +16,7 @@ function Notification(props) {
   const [requestId, setRequestId] = useState("");
   const [sender, setSender] = useState("");
   const [game, setGame] = useState("");
-
+  const requestKey = getSessionStorage("sessionId");
   const {isMulti, setIsmulti} = useContext(toMultiplayer);
 
   useEffect(() => {
@@ -27,12 +27,17 @@ function Notification(props) {
         Object.values(request).forEach((invite, i) => {
       
           if (
-            (invite.to === myUser.email || invite.from === myUser.email) &&
+            (invite.requestId === requestKey && (invite.to === myUser.email ||
+              invite.from === myUser.email)) &&
             invite.request_status === "accept"
           ) {
+            console.log('asfc');
+            props.parentCallback("multiplayer");
             setIsmulti(true);
           }
-          if (
+
+          else if (
+
             invite.to === myUser.email &&
             invite.request_status === "pending"
           ) {
@@ -43,7 +48,7 @@ function Notification(props) {
           }
         });
     });
-  }, [myUser, requestId, isMulti, setIsmulti]);
+  }, [myUser, requestId, isMulti, setIsmulti, requestKey, props]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
