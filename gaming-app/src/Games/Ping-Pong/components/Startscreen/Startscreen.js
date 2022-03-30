@@ -1,19 +1,13 @@
-import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import "./Startscreen.scss";
-import { uid } from "uid";
-import { useNavigate, useParams } from "react-router-dom";
-import Modal from "react-modal";
-import { auth } from "Games/Ping-Pong/Firebase/firebaseconfig.js";
-import { db } from "Games/Ping-Pong/Firebase/firebaseconfig.js";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { ref, onValue, update, set } from "firebase/database";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { setInSession } from "Games/Ping-Pong/util/storage/sessionStorage";
-import LeaderBoard from "Games/Ping-Pong/components/leaderboard/LeaderBoard";
-import { toast } from "react-toastify";
-import Notification from "components/Notification/Notification";
+import LeaderBoard from "components/LeaderBoard/LeaderBoard";
 import UserList from "components/UserList/UserList";
+import { onValue, ref } from "firebase/database";
+import { db } from "Games/Ping-Pong/Firebase/firebaseconfig.js";
+import React, { useEffect, useState } from "react";
+import Modal from "react-modal";
+import { useNavigate, useParams } from "react-router-dom";
+import { uid } from "uid";
+import "./Startscreen.scss";
 
 function Startscreen(props) {
   const [open, setOpen] = useState(false);
@@ -47,7 +41,6 @@ function Startscreen(props) {
   }, [gameid, uID]);
 
   // const gameSessionUrl = window.location.href;
-
 
   // const provider = new GoogleAuthProvider();
 
@@ -127,13 +120,13 @@ function Startscreen(props) {
         break;
       case "multiplayer":
         openModal();
-        // props.parentCallback("multiplayer");  
+        // props.parentCallback("multiplayer");
         break;
       default:
         props.parentCallback("");
     }
   };
- 
+
   const openModal = () => {
     setOpen(true);
   };
@@ -145,7 +138,6 @@ function Startscreen(props) {
 
   return (
     <>
-     
       <div className="starting-page">
         <div className="login-page">
           <p className="game-name">PING PONG</p>
@@ -155,7 +147,7 @@ function Startscreen(props) {
               {!ishared && (
                 <Button
                   className="startscreen-btn"
-                  onClick={() => changeMode('singleplayer')}
+                  onClick={() => changeMode("singleplayer")}
                 >
                   singleplayer
                 </Button>
@@ -163,7 +155,7 @@ function Startscreen(props) {
               <Button
                 className="startscreen-btn"
                 onClick={() => {
-                  changeMode('multiplayer');
+                  changeMode("multiplayer");
                 }}
               >
                 multiplayer

@@ -1,62 +1,17 @@
 import { Box, Button, Stack } from "@mui/material";
 import LeaderBoard from "components/LeaderBoard/LeaderBoard";
 import UserList from "components/UserList/UserList";
-import { child, onValue, push, ref } from "firebase/database";
-import React, { useEffect, useState } from "react";
+import { child, push } from "firebase/database";
+import React, { useState } from "react";
 import Modal from "react-modal";
-import { toast } from "react-toastify";
-import { db, gameListRef } from "utils/firebaseSetup/FirebaseSetup";
+import { gameListRef } from "utils/firebaseSetup/FirebaseSetup";
 import {
-  getSessionStorage,
   setSessionStorage
 } from "utils/Storage/SessionStorage";
 
 //-Selects mode and sends invite
 function ModeSelect(props) {
   const [open, setOpen] = useState(false);
-  const [acceptRequest, setAcceptRequest] = useState(false);
-  const myUser = getSessionStorage("user");
-  const [requestId, setRequestId] = useState("");
-  const [isRequestRejected, setRequestRejected] = useState(false);
-
-  useEffect(() => {
-    onValue(ref(db, `Invites`), (data) => {
-      const request = data.val();
-
-      request &&
-        Object.values(request).forEach((invite, i) => {
-          if (invite.request_status === "reject") {
-            setRequestRejected(true);
-          }
-          if (
-            invite.request_status === "accept" &&
-            (invite.to === myUser || invite.from === myUser)
-          ) {
-            setAcceptRequest(true);
-            setRequestId(invite.requestId);
-          }
-        });
-    });
-
-    return () => {
-      setRequestId("");
-      setAcceptRequest(false);
-    };
-  }, [myUser, requestId]);
-
-  useEffect(() => {
-    if (acceptRequest) props.parentCallback("ok");
-    else if (isRequestRejected) {
-      toast.error("Your invite rejected !", {
-        theme: "dark",
-        position: "top-right",
-      });
-    }
-    return () => {
-      setAcceptRequest(false);
-      setRequestRejected(false);
-    };
-  }, [acceptRequest, isRequestRejected, props, requestId]);
 
   //-selects mode
   const changeMode = (mymode) => {
