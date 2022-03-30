@@ -41,7 +41,7 @@ function Playground() {
     return (
       <div className="Playground">
         {switchMode(toHere)}
-        <DrawerLeft parentCallback={handleCallback} />
+        <DrawerLeft  />
         <Notification parentCallback={handleCallback} />
       </div>
     );

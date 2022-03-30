@@ -83,6 +83,10 @@ function Notification(props) {
     setOpen(false);
   };
 
+  const handleClose = () =>{
+    setOpen(false);
+  }
+
   const action = (
     <React.Fragment>
       <Button variant="contained" onClick={() => rejectRequest()}>
