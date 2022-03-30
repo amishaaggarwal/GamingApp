@@ -8,6 +8,8 @@ import { getSessionStorage } from "utils/Storage/SessionStorage";
 function DrawerLeft(props) {
   let myUser = JSON.parse(getSessionStorage("user"));
   myUser = myUser.email.replace(/[^a-zA-Z/\d]/g, "");
+
+  //-Keeps a tab of users availability on dashboard
   useEffect(() => {
     updateFireBase("UserList", myUser, "isOnline", true);
     onDisconnect(ref(db, `UserList/${myUser}/isOnline`)).set(false);

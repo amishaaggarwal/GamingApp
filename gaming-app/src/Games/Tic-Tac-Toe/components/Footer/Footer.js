@@ -1,9 +1,9 @@
-import React, { useState } from "react";
 import VolumeMuteIcon from "@mui/icons-material/VolumeMute";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import Wanted from "../../assets/Wanted.mp3";
-import useSound from "use-sound";
 import Tooltip from "@mui/material/Tooltip";
+import React, { useState } from "react";
+import useSound from "use-sound";
+import Wanted from "../../assets/Wanted.mp3";
 import "./Footer.scss";
 
 function Footer() {

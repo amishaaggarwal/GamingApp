@@ -25,6 +25,7 @@ function Notification(props) {
 
       request &&
         Object.values(request).forEach((invite, i) => {
+<<<<<<< HEAD
       
           if (
             (invite.to === myUser.email || invite.from === myUser.email) &&
@@ -32,6 +33,8 @@ function Notification(props) {
           ) {
             setIsmulti(true);
           }
+=======
+>>>>>>> 7071b046f01d808e237e3964122354902f9c790d
           if (
             invite.to === myUser.email &&
             invite.request_status === "pending"
@@ -40,6 +43,10 @@ function Notification(props) {
             setGame(invite.game);
             setSender(invite.from);
             setRequestId(invite.requestId);
+<<<<<<< HEAD
+=======
+          } else if (invite.request_status === "accept") {
+>>>>>>> 7071b046f01d808e237e3964122354902f9c790d
           }
         });
     });

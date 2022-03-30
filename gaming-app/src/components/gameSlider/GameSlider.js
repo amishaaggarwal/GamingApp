@@ -6,6 +6,7 @@ import "react-multi-carousel/lib/styles.css";
 import tt from "../../assets/images/tt.jpeg";
 import "./gameSlider.scss";
 
+//-Game photo carousel on dashboard
 function GameSlider() {
   const responsive = {
     desktop: {
@@ -45,12 +46,8 @@ function GameSlider() {
     >
       <Card sx={{ color: "white", minHeight: "70vh" }}>
         <CardContent className="game-card">
-          <img
-            src={tt}
-            alt="tic-tac"
-            loading="lazy"
-          />
-        
+          <img src={tt} alt="tic-tac" loading="lazy" />
+
           <Button className="card-button  ">Play!</Button>
         </CardContent>
       </Card>

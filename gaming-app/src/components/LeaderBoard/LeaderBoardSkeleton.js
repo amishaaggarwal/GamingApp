@@ -1,7 +1,8 @@
-import React from "react";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
+import React from "react";
 
+//-Displays skeleton while loading
 function LeaderBoardSkeleton() {
   const number = [1, 2, 3, 4, 5];
   return (

@@ -13,15 +13,26 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile,
+  updateProfile
 } from "firebase/auth";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { auth } from "utils/firebaseSetup/FirebaseSetup";
-import { setSessionStorage } from "utils/Storage/SessionStorage";
+import {
+  getSessionStorage,
+  setSessionStorage
+} from "utils/Storage/SessionStorage";
 import "./Login.scss";
+
+export const logout = async () => {
+  await signOut(auth);
+  toast.warn("You logged out of Game Dashboard!", {
+    theme: "dark",
+    position: "bottom-center",
+  });
+};
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -30,13 +41,16 @@ export default function Login() {
   const [user, setUser] = useState({});
   const [isLoginPage, setIsLoginPage] = useState(true);
   const navigate = useNavigate();
+  const myUser = JSON.parse(getSessionStorage("user"));
+
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
   });
+
   const register = async () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
-            console.log(user);
+      console.log(user);
 
       updateProfile(auth.currentUser, {
         displayName: username,
@@ -83,15 +97,6 @@ export default function Login() {
       });
     }
   };
-
-  // const logout = async () => {
-  //   await signOut(auth);
-  //   toast.warn("you logged out to game dashboard", {
-  //     theme: "dark",
-  //     position: "bottom-center",
-  //   });
-  // };
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -160,7 +165,7 @@ export default function Login() {
       });
   };
 
-  return (
+  return !myUser ? (
     <div className="container">
       <div className="login">
         <h2 className="login-text">
@@ -190,7 +195,6 @@ export default function Login() {
                 )}
                 <label className="input-label">Email</label>
                 <TextField
-                  id="standard-basic"
                   className="input-text"
                   type="email"
                   value={email}
@@ -198,7 +202,6 @@ export default function Login() {
                 />
                 <label className="input-label">Password</label>
                 <TextField
-                  id="standard-basic"
                   className="input-text"
                   type="password"
                   value={password}
@@ -253,5 +256,7 @@ export default function Login() {
         )}
       </div>
     </div>
+  ) : (
+    <Navigate to="/dashboard" />
   );
 }

@@ -1,7 +1,11 @@
+import MailIcon from "@mui/icons-material/Mail";
 import { Fab, Stack } from "@mui/material";
+import DrawerLeft from "components/DrawerLeft/DrawerLeft";
 import GameList from "components/GameList/GameList";
+import GameSlider from "components/gameSlider/GameSlider";
 import Header from "components/Header/Header";
 import LeaderBoard from "components/LeaderBoard/LeaderBoard";
+<<<<<<< HEAD
 import MailIcon from "@mui/icons-material/Mail";
 import React, { useContext, useState, useEffect } from "react";
 import "./DashBoard.scss";
@@ -15,6 +19,12 @@ import { toMultiplayer } from "App";
 //   isMulti: false,
 //   setIsMulti: () => {}
 // });
+=======
+import Notification from "components/Notification/Notification";
+import UserList from "components/UserList/UserList";
+import React from "react";
+import "./DashBoard.scss";
+>>>>>>> 7071b046f01d808e237e3964122354902f9c790d
 
 function DashBoard() {
   const [chooseGame, setchooseGame] = useState(false);
@@ -35,7 +45,10 @@ function DashBoard() {
   };
   return (
     <>
+<<<<<<< HEAD
       {/* <toMultiplayer.Provider value={value} > */}
+=======
+>>>>>>> 7071b046f01d808e237e3964122354902f9c790d
       <DrawerLeft />
       <Notification />
       <Stack spacing={1} className="dashboard">

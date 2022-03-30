@@ -1,11 +1,10 @@
 import { Button, Stack } from "@mui/material";
-import DrawScreen from "../../components/DrawScreen/DrawScreen";
 import { CROSS, ZERO } from "constants/game-constants";
 import {
   CELL_OCCUPIED,
   DRAW,
   LOST,
-  NOT_YOUR_TURN,
+  NOT_YOUR_TURN
 } from "constants/notification-constants";
 import { onValue, ref } from "firebase/database";
 import React, { useCallback, useEffect, useState } from "react";
@@ -15,6 +14,7 @@ import { toast } from "react-toastify";
 import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
 import { getSessionStorage } from "utils/Storage/SessionStorage";
+import DrawScreen from "../../components/DrawScreen/DrawScreen";
 import Squares from "../../components/Squares/Squares";
 import WinningScreen from "../../components/WinningScreen/WinningScreen";
 //-empty grid

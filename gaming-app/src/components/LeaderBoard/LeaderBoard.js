@@ -1,91 +1,101 @@
-import { Box, Stack } from "@mui/material";
 import StarRateIcon from "@mui/icons-material/StarRate";
-import "./LeaderBoard.scss";
+import { Box, Stack, Tooltip } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { readFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import pingPong from "../../constants/game-logos/ping-pong.jpeg";
 import ticTac from "../../constants/game-logos/tic-tac.ico";
+import "./LeaderBoard.scss";
 import LeaderBoardSkeleton from "./LeaderBoardSkeleton";
-import { Tooltip } from "@mui/material";
 
+const logos = {
+  "ping-pong": pingPong,
+  "tic-tac": ticTac,
+};
 function LeaderBoard() {
   const [leaderBoard, setLeaderBoard] = useState([]);
+  const [userlist, setUserlist] = useState([]);
+  const [gameid, setGameid] = useState([]);
   const [rankNo, setRankNo] = useState(null);
-  const [logos, setLogos] = useState({
-    "ping-pong": pingPong,
-    "tic-tac": ticTac,
-  });
 
+  //-Function identifies if the user is on dashboard or on any game and displays leaderboard accordingly
   const identifyLevel = useCallback(() => {
     const order = [];
     let res = [];
-
     let loc = window.location.href.split("/").slice(-2)[0];
 
     //-Dashboard level
     if (loc !== "dashboard") {
-      readFireBase("UserList", ``).then((obj) => {
-        Object.keys(obj).forEach((row, key) => {
-          let games = {};
-
-          readFireBase(`GameID/`);
-          obj[row]["totalScore"] &&
-            Object.values(obj[row]["gameID"]).forEach((u) => {
-              u &&
-                Object.values(u).forEach((o) => {
-                  let data = {};
-                  games[o.game] = {};
-                  data["total"] = games[o.game].total
-                    ? games[o.game].total + 1
-                    : 1;
-                  data["gname"] = o.game;
-                  data["logo"] = logos[o.game];
-                  games[o.game] = data;
-                });
-            });
-          res.push([row, obj[row]["totalScore"], games]);
+      Object.keys(userlist).forEach((row, key) => {
+        let games = {};
+        Object.keys(gameid).forEach((Game) => {
+          if (gameid[Game]["users"][`${row}`]) {
+            let data = {};
+            games[Game] = {};
+            data["total"] =
+              gameid[Game]["users"][`${row}`].total_games_played_by;
+            data["gname"] = Game;
+            data["logo"] = logos[Game];
+            games[Game] = data;
+          }
         });
+
+        Object.keys(games).length > 0 &&
+          res.push([userlist[row], userlist[row]["totalScore"], games]);
       });
     } else if (loc === "dashboard") {
+      //-game level
       let gameName = window.location.href.split("/").slice(-2)[1];
-      readFireBase(`GameID`, `/${gameName}/users`).then((obj) => {
-        console.log(obj);
-        Object.keys(obj).forEach((row) => {
-          let gameScore = obj[row].total_games_played_by,
-            total = obj[row].total_wins * 50,
-            u_data = {};
-          readFireBase("UserList", `${row}`).then((data) => {
-            u_data = data;
-            console.log(u_data, gameScore, total);
-            res.push([u_data, gameScore, total]);
-          });
-        });
+
+      Object.keys(userlist).forEach((row) => {
+        if (
+          gameid[gameName] &&
+          gameid[gameName].users &&
+          gameid[gameName].users[row]
+        ) {
+          let gameScore = gameid[gameName].users[row].total_wins * 50,
+            total = gameid[gameName].users[row].total_games_played_by,
+            u_data = userlist[row];
+          res.push([u_data, gameScore, total]);
+        }
       });
-      res.sort(function (a, b) {
-        return b[1] - a[1];
-      });
-      res.map((d)=>console.log(d))
-      console.log(res);
     }
 
-    console.log(loc !== "dashboard", res,res.length,typeof res);
-    loc !== "dashboard"
-      ? res.forEach((key) => {
-          // obj[key[0]].totalScore = key[1];
-          // obj[key[0]].total_games = key[2];
-          order.push(key[0]);
-        })
-      : res.map((d) => 
-          console.log(d)
-          // key[0].games_played = Object.values(key[2]);
-          // order.push(key[0]);
-        );
-    console.log(order);
+    res.sort((a, b) => {
+      return b[1] - a[1];
+    });
+    //-Adds games_played field if on dashboard level otherwise changes game level data
+    if (loc !== "dashboard") {
+      res.forEach((d) => {
+        d[0].games_played = Object.values(d[2]);
+        order.push(d[0]);
+      });
+    } else {
+      res.forEach((d) => {
+        d[0].totalScore = d[1];
+        d[0].total_games = d[2];
+        order.push(d[0]);
+      });
+    }
     return order;
-  }, [logos]);
+  }, [userlist, gameid]);
 
+  //-Reads data from firebase onmount to avoid delay
+  useEffect(() => {
+    readFireBase("UserList", "").then((res) => {
+      setUserlist(res);
+    });
+    readFireBase("GameID", "").then((res) => {
+      setGameid(res);
+    });
+  }, []);
+
+  //-Sets leaderboard data 
   useEffect(() => {
     setLeaderBoard(identifyLevel());
+
+    return () => {
+      setLeaderBoard([]);
+    }
   }, [identifyLevel]);
 
   return (
