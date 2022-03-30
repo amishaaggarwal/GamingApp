@@ -35,7 +35,9 @@ function Notification(props) {
             props.parentCallback("multiplayer");
             setIsmulti(true);
           }
+
           else if (
+
             invite.to === myUser.email &&
             invite.request_status === "pending"
           ) {
