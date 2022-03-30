@@ -18,7 +18,6 @@ function DashBoard() {
   const { isMulti, setIsmulti } = useContext(toMultiplayer);
 
   useEffect(() => {
-    console.log(isMulti);
     if(isMulti) setchooseGame(isMulti);
   }, [chooseGame, isMulti])
   

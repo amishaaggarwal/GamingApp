@@ -70,14 +70,14 @@ function GameList(props) {
    );
   return (
     <>
-      <Modal
+      {/* <Modal
         isOpen={open}
         className="request-cancel"
         overlayClassName="modal-overlay"
       >
         choose-game
         {game_list}
-      </Modal>
+      </Modal> */}
       <Stack spacing={2} className="game-list-parent">
         <Typography sx={{ color: "#B9EFA4", fontSize: "20px" }}>
           Games

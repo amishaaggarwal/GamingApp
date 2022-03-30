@@ -161,6 +161,9 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
           case "requestId":
             update(ref(db, `${endpoint}/${req_id}`), { requestId: value });
             break;
+          case "requestAccept":
+            update(ref(db, `${endpoint}/${req_id}`), { requestAccept: value });
+            break;
           default:
             break;
         }

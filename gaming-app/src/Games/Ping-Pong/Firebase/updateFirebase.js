@@ -61,6 +61,7 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
             y: value,
           });
           break;
+        default: break;
       }
       break;
 

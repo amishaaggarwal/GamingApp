@@ -1,54 +1,63 @@
-import React, { useEffect, useState, useContext } from "react";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
+import { toMultiplayer } from "App";
 import { onValue, ref } from "firebase/database";
+import React, { useContext, useEffect, useState } from "react";
 import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
-import { getSessionStorage } from "utils/Storage/SessionStorage";
-import { toMultiplayer } from 'App';
-
+import { getSessionStorage, setSessionStorage } from "utils/Storage/SessionStorage";
 
 function Notification(props) {
- 
   const [open, setOpen] = useState(false);
+  const [reqData, setReqData] = useState({});
   const myUser = JSON.parse(getSessionStorage("user"));
   const [requestId, setRequestId] = useState("");
   const [sender, setSender] = useState("");
   const [game, setGame] = useState("");
   const requestKey = getSessionStorage("sessionId");
-  const {isMulti, setIsmulti} = useContext(toMultiplayer);
+  const { isMulti, setIsmulti } = useContext(toMultiplayer);
 
   useEffect(() => {
     onValue(ref(db, `Invites`), (data) => {
       const request = data.val();
-
-      request &&
-        Object.values(request).forEach((invite, i) => {
-      
-          if (
-            (invite.requestId === requestKey && (invite.to === myUser.email ||
-              invite.from === myUser.email)) &&
-            invite.request_status === "accept"
-          ) {
-            console.log('asfc');
-            props.parentCallback("multiplayer");
-            setIsmulti(true);
-          }
-
-          else if (
-
-            invite.to === myUser.email &&
-            invite.request_status === "pending"
-          ) {
-            setOpen(true);
-            setGame(invite.game);
-            setSender(invite.from);
-            setRequestId(invite.requestId);
-          }
-        });
+      setReqData(request);
     });
-  }, [myUser, requestId, isMulti, setIsmulti, requestKey, props]);
+    return () => {
+      setReqData([]);
+    };
+  }, []);
+
+  useEffect(() => {
+    reqData &&
+      Object.values(reqData).forEach((invite, i) => {
+        if (
+          invite.requestId === requestKey &&
+          (invite.to.email === myUser.email ||
+            invite.from.email === myUser.email) &&
+          invite.request_status === "accept"
+        ) {
+          setSessionStorage('sessionId', invite.requestId);
+          updateFireBase('Invites', requestKey, 'requestAccept', true);
+          console.log("asfc");
+          // props.parentCallback("multiplayer");
+          updateFireBase("GameSession", requestKey, "players", {
+            player1: invite.from,
+            player2: invite.to,
+          });
+          setIsmulti(true);
+        } else if (
+          invite.to.email === myUser.email &&
+          invite.request_status === "pending"
+        ) {
+          setOpen(true);
+          setGame(invite.game);
+          setSender(invite.from);
+          setRequestId(invite.requestId);
+        }
+      });
+   
+  }, [reqData, requestKey, myUser.email, props, setIsmulti]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -91,7 +100,8 @@ function Notification(props) {
       <Snackbar
         open={open}
         autoHideDuration={6000}
-        message={`${sender} invites you for ${game}`}
+        onClose={() => setOpen(false)}
+        message={`${sender.email} invites you for ${game}`}
         action={action}
       />
     </>

@@ -94,17 +94,21 @@ function UserList() {
     };
   }, [requestId]);
 
-  const sendRequest = (actUserEmail) => {
-    const newKey = push(child(gameListRef, "GameSession")).key;
-    let key = newKey.substring(1);
-    setRequestId(key);
-    setSessionStorage("sessionId", key);
-    updateFireBase("Invites", key, "request_status", "pending");
-    updateFireBase("Invites", key, "from", myUser.email);
-    updateFireBase("Invites", key, "to", actUserEmail);
-    updateFireBase("Invites", key, "game", gameName);
-    updateFireBase("Invites", key, "requestId", key);
-    openModal();
+  const sendRequest = (actUserEmail, actUserName) => {
+    let loc = window.location.href.split("/").slice(-1)[0];
+    if (loc !== "dashboard") {
+      const newKey = push(child(gameListRef, "GameSession")).key;
+      let key = newKey.substring(1);
+      let p_data = { email: actUserEmail, name: actUserName };
+      setRequestId(key);
+      setSessionStorage("sessionId", key);
+      updateFireBase("Invites", key, "request_status", "pending");
+      updateFireBase("Invites", key, "from", myUser);
+      updateFireBase("Invites", key, "to", p_data);
+      updateFireBase("Invites", key, "game", gameName);
+      updateFireBase("Invites", key, "requestId", key);
+      openModal();
+    }
   };
 
   const cancelRequest = () => {
@@ -148,7 +152,9 @@ function UserList() {
             const labelId = `checkbox-list-secondary-label-${actUser}`;
             return (
               <ListItem key={i} disablePadding>
-                <ListItemButton onClick={() => sendRequest(actUser.email)}>
+                <ListItemButton
+                  onClick={() => sendRequest(actUser.email, actUser.name)}
+                >
                   <ListItemAvatar>
                     <Avatar
                       alt={`Avatar n°${actUser.name + 1}`}
