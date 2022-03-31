@@ -100,6 +100,7 @@ function UserList() {
       const newKey = push(child(gameListRef, "GameSession")).key;
       let key = newKey.substring(1);
       let p_data = { email: actUserEmail, name: actUserName };
+      console.log(p_data)
       setRequestId(key);
       setSessionStorage("sessionId", key);
       updateFireBase("Invites", key, "request_status", "pending");

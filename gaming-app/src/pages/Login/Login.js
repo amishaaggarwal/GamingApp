@@ -13,7 +13,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile
+  updateProfile,
 } from "firebase/auth";
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -22,7 +22,7 @@ import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { auth } from "utils/firebaseSetup/FirebaseSetup";
 import {
   getSessionStorage,
-  setSessionStorage
+  setSessionStorage,
 } from "utils/Storage/SessionStorage";
 import "./Login.scss";
 
@@ -47,6 +47,9 @@ export default function Login() {
     setUser(currentUser);
   });
 
+  const redirectTo = (path) => {
+    navigate(path);
+  };
   const register = async () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
@@ -69,7 +72,7 @@ export default function Login() {
       toast.success(`Welcome to the game dashboard!`, {
         theme: "dark",
       });
-      redirectTo();
+      redirectTo("/dashboard");
     } catch (error) {
       let index = error.message.indexOf("/");
       toast.error(error.message.slice(index + 1, -2), {
@@ -78,9 +81,6 @@ export default function Login() {
     }
   };
 
-  const redirectTo = () => {
-    navigate("/dashboard");
-  };
   const login = async () => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
@@ -88,7 +88,7 @@ export default function Login() {
         theme: "dark",
       });
       console.log(user);
-      redirectTo();
+      redirectTo("/dashboard");
     } catch (error) {
       let index = error.message.indexOf("/");
       toast.error(error.message.slice(index + 1, -2), {
@@ -137,7 +137,7 @@ export default function Login() {
         toast.success(`loggedin success`, {
           theme: "dark",
         });
-        redirectTo();
+        redirectTo("/dashboard");
       })
       .catch((error) => {
         toast.error(error.message, {
@@ -152,12 +152,26 @@ export default function Login() {
   const signInWithFaceBook = () => {
     signInWithPopup(auth, FBprovider)
       .then((result) => {
-        // const user = result.user;
-        // const credential = FacebookAuthProvider.credentialFromResult(result);
-        // const accessToken = credential.accessToken;
-        redirectTo();
+        const user = result.user.providerData[0];
+        console.log(user);
+        toast.success(`Logged-in Success!`, {
+          theme: "dark",
+        });
+        updateFireBase("UserList", user.email, "name", user.displayName);
+        updateFireBase("UserList", user.email, "email", user.email);
+        updateFireBase("UserList", user.email, "dp", user.photoURL);
+        setSessionStorage(
+          "user",
+          JSON.stringify({
+            name: user.displayName,
+            email: user.email,
+          })
+        );
+       
+        redirectTo("/dashboard");
       })
       .catch((error) => {
+        console.log(error.email);
         toast.error(`${error.code}:${error.message}`, {
           theme: "dark",
           position: "top-center",
