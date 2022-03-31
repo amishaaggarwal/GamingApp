@@ -43,13 +43,17 @@ export default function Login() {
   const navigate = useNavigate();
   const myUser = JSON.parse(getSessionStorage("user"));
 
+  //- whenever the auth changes this function run
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
   });
 
+  //- redirection 
   const redirectTo = (path) => {
     navigate(path);
   };
+
+  //- sign up in with email and password
   const register = async () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
@@ -81,6 +85,7 @@ export default function Login() {
     }
   };
 
+  //- login with email and password
   const login = async () => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
@@ -102,8 +107,8 @@ export default function Login() {
     event.preventDefault();
   };
 
+  //-  sign in with google
   const Gprovider = new GoogleAuthProvider();
-
   const signInWithGoggle = () => {
     signInWithPopup(auth, Gprovider)
       .then((result) => {
@@ -147,8 +152,8 @@ export default function Login() {
       });
   };
 
+  //- sign in with facebook
   const FBprovider = new FacebookAuthProvider();
-
   const signInWithFaceBook = () => {
     signInWithPopup(auth, FBprovider)
       .then((result) => {
