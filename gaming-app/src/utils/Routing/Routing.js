@@ -14,7 +14,7 @@ function Routing() {
         path="/dashboard"
         element={
           <PrivateRoute>
-            <DashBoard />
+            {<DashBoard />}
           </PrivateRoute>
         }
       />
@@ -22,7 +22,7 @@ function Routing() {
         path="/dashboard/tic-tac"
         element={
           <PrivateRoute>
-            <TicTac />
+            {<TicTac />}
           </PrivateRoute>
         }
       />
@@ -30,7 +30,7 @@ function Routing() {
         path="/dashboard/ping-pong"
         element={
           <PrivateRoute>
-            <PingPong />
+            {<PingPong />}
           </PrivateRoute>
         }
       />
