@@ -31,6 +31,8 @@ function Notification(props) {
   useEffect(() => {
     reqData &&
       Object.values(reqData).forEach((invite, i) => {
+    
+        console.log(invite.to.email === myUser.email);
         if (
           invite.requestId === requestKey &&
           (invite.to.email === myUser.email ||
@@ -38,7 +40,7 @@ function Notification(props) {
           invite.request_status === "accept"
         ) {
           setSessionStorage('sessionId', invite.requestId);
-          updateFireBase('Invites', requestKey, 'requestAccept', true);
+          // updateFireBase('Invites', requestKey, 'requestAccept', true);
           console.log("asfc");
           // props.parentCallback("multiplayer");
           updateFireBase("GameSession", requestKey, "players", {
