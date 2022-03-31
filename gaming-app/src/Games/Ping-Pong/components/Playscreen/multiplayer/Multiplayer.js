@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sketch from "react-p5";
-import { onValue, ref } from "firebase/database";
+import { onValue, ref, set} from "firebase/database";
 import { db } from "Games/Ping-Pong/Firebase/firebaseconfig.js";
 import { updateFirebase } from "Games/Ping-Pong/Firebase/updateFirebase.js";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -34,12 +34,13 @@ function Multiplayer(props) {
   const [p5Btn, setP5Btn] = useState({});
   const [themeType, setThemeType] = useState("light theme");
   const [startNexit, setStartNexit] = useState("start");
+  const gameSessionId = getFromSession('sessionId');
   // const [resetBtn, setResetBtn] = useState(true);
 
   const navigate = useNavigate();
 
   // let resetGame = state.reset;
-  let gameSessionId = props.gameSessionId;
+  // let gameSessionId = props.gameSessionId;
 
   let PaddleX;
   let PaddleX2;
@@ -47,46 +48,33 @@ function Multiplayer(props) {
 
   useEffect(() => {
 
-    // set(ref(db, `Game/${}`), {
-    //       players: {
-    //         player1: {
-    //           // name: !ishared
-    //           //   ? result.user.displayName
-    //           //   : data.players.player1.name,
-    //           // email: !ishared ? result.user.email : data.players.player1.email,
-    //         },
-    //         player2: {
-    //           // name: ishared ? result.user.displayName : "",
-    //           // email: ishared ? result.user.email : "",
-    //         },
-    //       },
-
-    //       gamestate: {
-    //         ball: {
-    //           x: wWidth / 2,
-    //           y: wHeight / 2.15,
-    //         },
-    //         player1_paddle: {
-    //           y: wHeight / 2.5,
-    //         },
-    //         player2_paddle: {
-    //           y: wHeight / 2.5,
-    //         },
-    //         score: {
-    //           player1_score: 0,
-    //           player2_score: 0,
-    //         },
-    //         ballspeed: {
-    //           x: 0,
-    //           y: 0,
-    //         },
-    //       },
-    //       start: false,
-    //       winner: {},
-    //     });
+    set(ref(db, `GameSession/${gameSessionId}`), {
+          gamestate: {
+            ball: {
+              x: wWidth / 2,
+              y: wHeight / 2.15,
+            },
+            player1_paddle: {
+              y: wHeight / 2.5,
+            },
+            player2_paddle: {
+              y: wHeight / 2.5,
+            },
+            score: {
+              player1_score: 0,
+              player2_score: 0,
+            },
+            ballspeed: {
+              x: 0,
+              y: 0,
+            },
+          },
+          start: false,
+          winner: {},
+        });
     return () => {
     }
-  }, [])
+  }, [gameSessionId, wWidth, wHeight])
   
 
   useEffect(() => {
@@ -426,7 +414,7 @@ function Multiplayer(props) {
   return (
     <div className="playing-page">
       multiplayer
-      {/* <Sketch setup={setup} draw={draw}></Sketch> */}
+      <Sketch setup={setup} draw={draw}></Sketch>
     </div>
   );
 }
