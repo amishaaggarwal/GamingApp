@@ -6,7 +6,10 @@ import { onValue, ref } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
 import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
-import { getSessionStorage, setSessionStorage } from "utils/Storage/SessionStorage";
+import {
+  getSessionStorage,
+  setSessionStorage,
+} from "utils/Storage/SessionStorage";
 
 function Notification(props) {
   const [open, setOpen] = useState(false);
@@ -18,6 +21,7 @@ function Notification(props) {
   const requestKey = getSessionStorage("sessionId");
   const { isMulti, setIsmulti } = useContext(toMultiplayer);
 
+  //-Fetches entire invites data from firebase
   useEffect(() => {
     onValue(ref(db, `Invites`), (data) => {
       const request = data.val();
@@ -31,16 +35,15 @@ function Notification(props) {
   useEffect(() => {
     reqData &&
       Object.values(reqData).forEach((invite, i) => {
+        console.log(invite.to.email === myUser.email);
         if (
-          invite.requestId === requestKey &&
-          (invite.to.email === myUser.email ||
-            invite.from.email === myUser.email) &&
+          ((invite.requestId === requestKey &&
+            invite.from.email === myUser.email) ||
+            invite.to.email === myUser.email) &&
           invite.request_status === "accept"
         ) {
-          setSessionStorage('sessionId', invite.requestId);
+          setSessionStorage("sessionId", invite.requestId);
           updateFireBase('Invites', requestKey, 'requestAccept', true);
-          console.log("asfc");
-          // props.parentCallback("multiplayer");
           updateFireBase("GameSession", requestKey, "players", {
             player1: invite.from,
             player2: invite.to,
@@ -54,9 +57,9 @@ function Notification(props) {
           setGame(invite.game);
           setSender(invite.from);
           setRequestId(invite.requestId);
+          
         }
       });
-   
   }, [reqData, requestKey, myUser.email, props, setIsmulti]);
 
   useEffect(() => {
@@ -64,7 +67,6 @@ function Notification(props) {
       setOpen(false);
       if (requestId) {
         updateFireBase("Invites", requestId, "request_status", "expire");
-        updateFireBase("Invites", requestId, "to", "");
       }
     }, 60000);
     return () => {
@@ -83,10 +85,6 @@ function Notification(props) {
     setOpen(false);
   };
 
-  const handleClose = () =>{
-    setOpen(false);
-  }
-
   const action = (
     <React.Fragment>
       <Button variant="contained" onClick={() => rejectRequest()}>
@@ -103,7 +101,7 @@ function Notification(props) {
     <>
       <Snackbar
         open={open}
-        autoHideDuration={6000}
+        autoHideDuration={60000}
         onClose={() => setOpen(false)}
         message={`${sender.email} invites you for ${game}`}
         action={action}

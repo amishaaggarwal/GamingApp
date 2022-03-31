@@ -22,6 +22,7 @@ function UserList() {
   const myUser = JSON.parse(getSessionStorage("user"));
   const [open, setOpen] = useState(false);
   const [requestId, setRequestId] = useState("");
+  const gameName = window.location.href.split("/").slice(-1)[0];
   const requestKey = getSessionStorage("sessionId");
 
   //-opens lost modal
@@ -34,7 +35,6 @@ function UserList() {
     setOpen(false);
   };
 
-  let gameName = window.location.href.split("/").slice(-1)[0];
   useEffect(() => {
     onValue(ref(db, `Invites`), (data) => {
       const request = data.val();
@@ -43,20 +43,20 @@ function UserList() {
         Object.values(request).forEach((invite, i) => {
           if (
             invite.requestId === requestKey &&
-            invite.from === myUser.email &&
+            invite.from.email === myUser.email &&
             invite.request_status === "reject"
           ) {
-            toast.warn(`${invite.to} denied your game request`, {
+            toast.warn(`${invite.to.email} denied your game request!`, {
               theme: "dark",
             });
             updateFireBase("Invites", requestId, "request_status", "expire");
-
             closeModal();
           }
         });
     });
   }, [myUser.email, requestKey, requestId]);
 
+  //-Checks active users and displays
   useEffect(() => {
     let active = [];
     onValue(ref(db, `UserList/`), (data) => {
@@ -81,6 +81,7 @@ function UserList() {
     };
   }, [myUser.email]);
 
+  //-Expires sent request
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (requestId) {
@@ -94,12 +95,14 @@ function UserList() {
     };
   }, [requestId]);
 
+  //-sends request and updates firebase and stores key in session
   const sendRequest = (actUserEmail, actUserName) => {
     let loc = window.location.href.split("/").slice(-1)[0];
     if (loc !== "dashboard") {
       const newKey = push(child(gameListRef, "GameSession")).key;
       let key = newKey.substring(1);
       let p_data = { email: actUserEmail, name: actUserName };
+     
       setRequestId(key);
       setSessionStorage("sessionId", key);
       updateFireBase("Invites", key, "request_status", "pending");
@@ -107,6 +110,7 @@ function UserList() {
       updateFireBase("Invites", key, "to", p_data);
       updateFireBase("Invites", key, "game", gameName);
       updateFireBase("Invites", key, "requestId", key);
+      
       openModal();
     }
   };
