@@ -4,7 +4,7 @@ import {
   CELL_OCCUPIED,
   DRAW,
   LOST,
-  NOT_YOUR_TURN
+  NOT_YOUR_TURN,
 } from "constants/notification-constants";
 import { onValue, ref } from "firebase/database";
 import React, { useCallback, useEffect, useState } from "react";
@@ -45,7 +45,7 @@ function Multiplayer() {
   const [drawModalIsOpen, setDrawIsOpen] = useState(false);
   const [lostModalIsOpen, setLostModalIsOpen] = useState(false);
   const myUser = JSON.parse(getSessionStorage("user")).email;
-  const newKey = getSessionStorage("key");
+  const newKey = getSessionStorage("sessionId");
   const [users, setUsers] = useState({});
   const [currentState, setCurrentState] = useState(initialState);
   const [moveNow, setMoveNow] = useState(CROSS);
@@ -83,6 +83,30 @@ function Multiplayer() {
   const closeLoseModal = () => {
     setLostModalIsOpen(false);
   };
+  useEffect(() => {
+    const getUserData = () => {
+      try {
+        onValue(
+          ref(db, `GameSession/${newKey}`).then((res) => {
+            const data = res.val();
+            console.log("onvalue", data, res);
+            setUsers(data.players);
+          })
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getUserData();
+  }, [newKey]);
+
+  console.log("i am hereeeeeeeeeeeeee", newKey, users);
+
+  // useEffect(() => {
+  //   console.log("Hello");
+  //   getUserData();
+  // }, [getUserData]);
+  // console.log(users);
 
   //-opens appropriate modal if we have winner,loser or draw
   const showWinner = useCallback(
@@ -115,6 +139,7 @@ function Multiplayer() {
           gameid: newKey,
         });
       }
+      console.log(users.player1.email);
     },
     [
       count,
@@ -132,19 +157,19 @@ function Multiplayer() {
   useEffect(() => {
     onValue(ref(db, `GameSession/${newKey}`), (snapshot) => {
       const data = snapshot.val();
+
       setWins(data.winner);
       setCurrentState(data.gamestate);
       setMoveNow(data.current);
-      setUsers(data.players);
       setCount(data.count);
     });
     showWinner(wins);
+
     //cleanup function
     return () => {
       setCurrentState(initialState);
       setMoveNow(CROSS);
       setWins("");
-      setUsers("");
       setCount(9);
     };
   }, [newKey, showWinner, wins, count]);

@@ -98,9 +98,7 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
             let newval;
             readFireBase("UserList", `${newKey}/invite_id`).then((res) => {
               newval = res ? res : [];
-
-              newval.push(value.obj);
-
+              newval.push(value);
               update(ref(db, `${endpoint}/${newKey}`), {
                 invite_id: newval,
               });
@@ -189,6 +187,9 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
             break;
           case "game":
             update(ref(db, `${endpoint}/${req_id}`), { game: value });
+            break;
+          case "requestAccept":
+            update(ref(db, `${endpoint}/${req_id}`), { requestAccept: value });
             break;
           case "requestId":
             update(ref(db, `${endpoint}/${req_id}`), { requestId: value });
