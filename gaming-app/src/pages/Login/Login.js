@@ -176,7 +176,7 @@ export default function Login() {
         redirectTo("/dashboard");
       })
       .catch((error) => {
-        console.log(error.email);
+        console.log(error);
         toast.error(`${error.code}:${error.message}`, {
           theme: "dark",
           position: "top-center",

@@ -4,7 +4,7 @@ import {
   CELL_OCCUPIED,
   DRAW,
   LOST,
-  NOT_YOUR_TURN
+  NOT_YOUR_TURN,
 } from "constants/notification-constants";
 import { onValue, ref } from "firebase/database";
 import React, { useCallback, useEffect, useState } from "react";
@@ -45,7 +45,7 @@ function Multiplayer() {
   const [drawModalIsOpen, setDrawIsOpen] = useState(false);
   const [lostModalIsOpen, setLostModalIsOpen] = useState(false);
   const myUser = JSON.parse(getSessionStorage("user")).email;
-  const newKey = getSessionStorage("key");
+  const newKey = getSessionStorage("sessionId");
   const [users, setUsers] = useState({});
   const [currentState, setCurrentState] = useState(initialState);
   const [moveNow, setMoveNow] = useState(CROSS);
@@ -83,78 +83,103 @@ function Multiplayer() {
   const closeLoseModal = () => {
     setLostModalIsOpen(false);
   };
+ 
+  
+  useEffect(() => {
+    alert("hjhjjh");
+    onValue(ref(db, `GameSession/${newKey}`), (res) => {
+      const data = res.val();
+      console.log("--------------------------------------------onvalue", data, res);
+      setUsers(data.players);
+    });
+    alert(newKey);
+  }, [newKey]);
+
+  console.log("i am hereeeeeeeeeeeeee", newKey, users);
+
+  // useEffect(() => {
+  //   console.log("Hello");
+  //   getUserData();
+  // }, [getUserData]);
+  // console.log(users);
 
   //-opens appropriate modal if we have winner,loser or draw
-  const showWinner = useCallback(
-    (wins) => {
-      if (wins !== "") {
-        if (
-          myUser !==
-          (wins === CROSS ? users.player1.email : users.player2.email)
-        ) {
-          openLoseModal();
-          updateFireBase("UserList", myUser, "scoreCredit", 0);
-          updateFireBase("GameID", myUser, "gameSessionList", {
-            obj: { status: "lost", score: 0 },
-            gameid: newKey,
-          });
-        } else {
-          openWinModal();
-          updateFireBase("UserList", myUser, "scoreCredit", 50);
-          updateFireBase("GameID", myUser, "gameSessionList", {
-            obj: { status: "won", score: 1 },
-            gameid: newKey,
-          });
-        }
-      } else if (count === 0) {
-        updateFireBase("GameSession", newKey, "draw", true);
-        openDrawModal();
-        updateFireBase("UserList", myUser, "scoreCredit", 0);
-        updateFireBase("GameID", myUser, "gameSessionList", {
-          obj: { status: "draw", score: 0 },
-          gameid: newKey,
-        });
-      }
-    },
-    [
-      count,
-      myUser,
-      users.player1.email,
-      users.player2.email,
-      newKey,
-      openDrawModal,
-      openWinModal,
-      openLoseModal,
-    ]
-  );
+  // const showWinner = useCallback(
+  //   (wins) => {
+  //     if (wins !== "") {
+  //       if (
+  //         myUser !==
+  //         (wins === CROSS ? users.player1.email : users.player2.email)
+  //       ) {
+  //         openLoseModal();
+  //         updateFireBase("UserList", myUser, "scoreCredit", 0);
+  //         updateFireBase("GameID", myUser, "gameSessionList", {
+  //           obj: { status: "lost", score: 0 },
+  //           gameid: newKey,
+  //         });
+  //       } else {
+  //         openWinModal();
+  //         updateFireBase("UserList", myUser, "scoreCredit", 50);
+  //         updateFireBase("GameID", myUser, "gameSessionList", {
+  //           obj: { status: "won", score: 1 },
+  //           gameid: newKey,
+  //         });
+  //       }
+  //     } else if (count === 0) {
+  //       updateFireBase("GameSession", newKey, "draw", true);
+  //       openDrawModal();
+  //       updateFireBase("UserList", myUser, "scoreCredit", 0);
+  //       updateFireBase("GameID", myUser, "gameSessionList", {
+  //         obj: { status: "draw", score: 0 },
+  //         gameid: newKey,
+  //       });
+  //     }
+  //     console.log(users.player1.email);
+  //   },
+  //   [
+  //     count,
+  //     myUser,
+  //     users.player1.email,
+  //     users.player2.email,
+  //     newKey,
+  //     openDrawModal,
+  //     openWinModal,
+  //     openLoseModal,
+  //   ]
+  // );
 
   //-updates all states on value change in firebase
-  useEffect(() => {
-    onValue(ref(db, `GameSession/${newKey}`), (snapshot) => {
-      const data = snapshot.val();
-      setWins(data.winner);
-      setCurrentState(data.gamestate);
-      setMoveNow(data.current);
-      setUsers(data.players);
-      setCount(data.count);
-    });
-    showWinner(wins);
-    //cleanup function
-    return () => {
-      setCurrentState(initialState);
-      setMoveNow(CROSS);
-      setWins("");
-      setUsers("");
-      setCount(9);
-    };
-  }, [newKey, showWinner, wins, count]);
+  // useEffect(() => {
+  //   onValue(ref(db, `GameSession/${newKey}`), (snapshot) => {
+  //     const data = snapshot.val();
+
+  //     setWins(data.winner);
+  //     setCurrentState(data.gamestate);
+  //     setMoveNow(data.current);
+  //     setCount(data.count);
+  //   });
+  //   showWinner(wins);
+
+  //   //cleanup function
+  //   return () => {
+  //     setCurrentState(initialState);
+  //     setMoveNow(CROSS);
+  //     setWins("");
+  //     setCount(9);
+  //   };
+  // }, [newKey, showWinner, wins, count]);
 
   //-checks if we have a winner by searching for winning conditions in the current grid
   const checkWinner = useCallback(
     (mygrid) => {
       for (let i = 0; i < winingState.length; i++) {
         const [a, b, c] = winingState[i];
-        if (mygrid[a] && mygrid[a] === mygrid[b] && mygrid[a] === mygrid[c]) {
+        if (
+          users &&
+          mygrid[a] &&
+          mygrid[a] === mygrid[b] &&
+          mygrid[a] === mygrid[c]
+        ) {
           won = mygrid[a];
           updateFireBase("GameSession", newKey, "winner", won);
           updateFireBase("UserList", users.player1.email, "total_games", 1);
@@ -177,7 +202,7 @@ function Multiplayer() {
         }
       }
     },
-    [newKey, users.player1.email, users.player2.email]
+    [newKey, users]
   );
 
   //-checks if the grid cell is empty
@@ -188,33 +213,28 @@ function Multiplayer() {
   //-updates firebase states when move happens
   const playMove = useCallback(
     (index) => {
-      let mygrid = [...currentState];
-      mygrid[index] = moveNow;
-      let lastMove = {
-        id: moveNow === CROSS ? users.player1.email : users.player2.email,
-        position: index,
-      };
-      let turn = moveNow === CROSS ? ZERO : CROSS;
-      checkWinner(mygrid);
-      updateFireBase("GameSession", newKey, "gamestate", mygrid);
-      updateFireBase(
-        "GameSession",
-        newKey,
-        "count",
-        mygrid.filter(checkEmpty).length
-      );
+      if (users) {
+        let mygrid = [...currentState];
+        mygrid[index] = moveNow;
+        let lastMove = {
+          id: moveNow === CROSS ? users.player1.email : users.player2.email,
+          position: index,
+        };
+        let turn = moveNow === CROSS ? ZERO : CROSS;
+        checkWinner(mygrid);
+        updateFireBase("GameSession", newKey, "gamestate", mygrid);
+        updateFireBase(
+          "GameSession",
+          newKey,
+          "count",
+          mygrid.filter(checkEmpty).length
+        );
 
-      updateFireBase("GameSession", newKey, "current", turn);
-      updateFireBase("GameSession", newKey, "lastMove", lastMove);
+        updateFireBase("GameSession", newKey, "current", turn);
+        updateFireBase("GameSession", newKey, "lastMove", lastMove);
+      }
     },
-    [
-      moveNow,
-      currentState,
-      newKey,
-      checkWinner,
-      users.player2.email,
-      users.player1.email,
-    ]
+    [users, moveNow, currentState, newKey, checkWinner]
   );
 
   //-handles click of user
@@ -262,154 +282,156 @@ function Multiplayer() {
     closeLoseModal();
   };
 
-  return (
-    <div>
-      <div>
-        <span className="move-text">
-          {moveNow === CROSS ? users.player1.name : users.player2.name}, Your
-          Move!
-        </span>
-      </div>
-      <div className="tic-tac-grid">
-        <div className="tic-tac-row ">
-          <Squares
-            mystyle="b-bottom b-right"
-            mystate={currentState[0]}
-            i={0}
-            task={squareClick}
-          />
-          <Squares
-            mystyle="b-bottom b-right"
-            mystate={currentState[1]}
-            i={1}
-            task={squareClick}
-          />
-          <Squares
-            mystyle="b-bottom"
-            mystate={currentState[2]}
-            i={2}
-            task={squareClick}
-          />
-        </div>
-        <div className="tic-tac-row">
-          <Squares
-            mystyle="b-bottom b-right"
-            mystate={currentState[3]}
-            i={3}
-            task={squareClick}
-          />
-          <Squares
-            mystyle="b-bottom b-right"
-            mystate={currentState[4]}
-            i={4}
-            task={squareClick}
-          />
-          <Squares
-            mystyle="b-bottom"
-            mystate={currentState[5]}
-            i={5}
-            task={squareClick}
-          />
-        </div>
-        <div className="tic-tac-row">
-          <Squares
-            mystyle="b-right"
-            mystate={currentState[6]}
-            i={6}
-            task={squareClick}
-          />
-          <Squares
-            mystyle="b-right"
-            mystate={currentState[7]}
-            i={7}
-            task={squareClick}
-          />
-          <Squares mystate={currentState[8]} i={8} task={squareClick} />
-        </div>
-        {(!users.player1.name || !users.player2.name) && (
-          <div className="move-text">Waiting for opponent...</div>
-        )}
-        <button onClick={resetGame} className="rst-button">
-          Reset Game
-        </button>
-      </div>
+  return <h1>Helooo</h1>;
+  // return (
+  //   <div>
+  //     <h1>hdhhdhhfhffhfh</h1>
+  //     <div>
+  //       {/* <span className="move-text">
+  //         {users && moveNow === CROSS ? users.player1.name : users.player2.name}, Your
+  //         Move!
+  //       </span> */}
+  //     </div>
+  //     <div className="tic-tac-grid">
+  //       <div className="tic-tac-row ">
+  //         <Squares
+  //           mystyle="b-bottom b-right"
+  //           mystate={currentState[0]}
+  //           i={0}
+  //           task={squareClick}
+  //         />
+  //         <Squares
+  //           mystyle="b-bottom b-right"
+  //           mystate={currentState[1]}
+  //           i={1}
+  //           task={squareClick}
+  //         />
+  //         <Squares
+  //           mystyle="b-bottom"
+  //           mystate={currentState[2]}
+  //           i={2}
+  //           task={squareClick}
+  //         />
+  //       </div>
+  //       <div className="tic-tac-row">
+  //         <Squares
+  //           mystyle="b-bottom b-right"
+  //           mystate={currentState[3]}
+  //           i={3}
+  //           task={squareClick}
+  //         />
+  //         <Squares
+  //           mystyle="b-bottom b-right"
+  //           mystate={currentState[4]}
+  //           i={4}
+  //           task={squareClick}
+  //         />
+  //         <Squares
+  //           mystyle="b-bottom"
+  //           mystate={currentState[5]}
+  //           i={5}
+  //           task={squareClick}
+  //         />
+  //       </div>
+  //       <div className="tic-tac-row">
+  //         <Squares
+  //           mystyle="b-right"
+  //           mystate={currentState[6]}
+  //           i={6}
+  //           task={squareClick}
+  //         />
+  //         <Squares
+  //           mystyle="b-right"
+  //           mystate={currentState[7]}
+  //           i={7}
+  //           task={squareClick}
+  //         />
+  //         <Squares mystate={currentState[8]} i={8} task={squareClick} />
+  //       </div>
+  //       {(!users.player1.name || !users.player2.name) && (
+  //         <div className="move-text">Waiting for opponent...</div>
+  //       )}
+  //       <button onClick={resetGame} className="rst-button">
+  //         Reset Game
+  //       </button>
+  //     </div>
 
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeWinModal}
-        className="winning-modal"
-        overlayClassName="modal-overlay"
-      >
-        <WinningScreen winnerIs={won} multi={users} />
-        <Stack direction="row" spacing={2} className="button-row">
-          <Button
-            onClick={closeWinModal}
-            className="rst-button"
-            sx={{ color: "black" }}
-          >
-            Close
-          </Button>
-          <Button
-            onClick={playAgain}
-            className="rst-button"
-            sx={{ color: "black" }}
-          >
-            Play Again
-          </Button>
-        </Stack>
-      </Modal>
-      <Modal
-        isOpen={drawModalIsOpen}
-        onRequestClose={closeDrawModal}
-        className="winning-modal"
-        overlayClassName="modal-overlay"
-      >
-        <DrawScreen msg={DRAW} />
-        <Stack direction="row" spacing={2} className="button-row">
-          <Button
-            onClick={closeDrawModal}
-            className="rst-button"
-            sx={{ color: "black" }}
-          >
-            Close
-          </Button>
-          <Button
-            onClick={playAgain}
-            className="rst-button"
-            sx={{ color: "black" }}
-          >
-            Play Again!
-          </Button>
-        </Stack>
-      </Modal>
+  //     <Modal
+  //       isOpen={modalIsOpen}
+  //       onRequestClose={closeWinModal}
+  //       className="winning-modal"
+  //       overlayClassName="modal-overlay"
+  //     >
+  //       <WinningScreen winnerIs={won} multi={users} />
+  //       <Stack direction="row" spacing={2} className="button-row">
+  //         <Button
+  //           onClick={closeWinModal}
+  //           className="rst-button"
+  //           sx={{ color: "black" }}
+  //         >
+  //           Close
+  //         </Button>
+  //         <Button
+  //           onClick={playAgain}
+  //           className="rst-button"
+  //           sx={{ color: "black" }}
+  //         >
+  //           Play Again
+  //         </Button>
+  //       </Stack>
+  //     </Modal>
+  //     <Modal
+  //       isOpen={drawModalIsOpen}
+  //       onRequestClose={closeDrawModal}
+  //       className="winning-modal"
+  //       overlayClassName="modal-overlay"
+  //     >
+  //       <DrawScreen msg={DRAW} />
+  //       <Stack direction="row" spacing={2} className="button-row">
+  //         <Button
+  //           onClick={closeDrawModal}
+  //           className="rst-button"
+  //           sx={{ color: "black" }}
+  //         >
+  //           Close
+  //         </Button>
+  //         <Button
+  //           onClick={playAgain}
+  //           className="rst-button"
+  //           sx={{ color: "black" }}
+  //         >
+  //           Play Again!
+  //         </Button>
+  //       </Stack>
+  //     </Modal>
 
-      <Modal
-        isOpen={lostModalIsOpen}
-        onRequestClose={closeLoseModal}
-        className="winning-modal"
-        overlayClassName="modal-overlay"
-      >
-        <DrawScreen msg={LOST} />
-        <Stack direction="row" spacing={2} className="button-row">
-          <Button
-            onClick={closeLoseModal}
-            className="rst-button"
-            sx={{ color: "black" }}
-          >
-            Close
-          </Button>
-          <Button
-            onClick={playAgain}
-            className="rst-button"
-            sx={{ color: "black" }}
-          >
-            Play Again!
-          </Button>
-        </Stack>
-      </Modal>
-      {confetti && <Confetti />}
-    </div>
-  );
+  //     <Modal
+  //       isOpen={lostModalIsOpen}
+  //       onRequestClose={closeLoseModal}
+  //       className="winning-modal"
+  //       overlayClassName="modal-overlay"
+  //     >
+  //       <DrawScreen msg={LOST} />
+  //       <Stack direction="row" spacing={2} className="button-row">
+  //         <Button
+  //           onClick={closeLoseModal}
+  //           className="rst-button"
+  //           sx={{ color: "black" }}
+  //         >
+  //           Close
+  //         </Button>
+  //         <Button
+  //           onClick={playAgain}
+  //           className="rst-button"
+  //           sx={{ color: "black" }}
+  //         >
+  //           Play Again!
+  //         </Button>
+  //       </Stack>
+  //     </Modal>
+  //     {confetti && <Confetti />}
+  //   </div>
+  // );
 }
 
 export default Multiplayer;

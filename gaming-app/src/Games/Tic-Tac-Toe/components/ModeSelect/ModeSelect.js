@@ -19,17 +19,17 @@ function ModeSelect(props) {
   const myUser = JSON.parse(getSessionStorage('user'));
 
   const [open, setOpen] = useState(false);
- useEffect(() => {
-   onValue(ref(db, `Invites/${requestKey}`), (data) => {
-     const request = data.val();
-     console.log(request.requestAccept);
-     if (request.requestAccept && (request.from.email === myUser.email || request.to.email === myUser.email)) {
-       console.log('here');
-        props.parentCallback("multiplayer");
-     }
-   });
-   return () => {};
- }, [props, myUser.email, requestKey]);
+//  useEffect(() => {
+//    onValue(ref(db, `Invites/${requestKey}`), (data) => {
+//      const request = data.val();
+//      console.log(request.requestAccept);
+//      if (request.requestAccept && (request.from.email === myUser.email || request.to.email === myUser.email)) {
+//        console.log('here');
+//         props.parentCallback("multiplayer");
+//      }
+//    });
+//    return () => {};
+//  }, [props, myUser.email, requestKey]);
   
   //-selects mode
   const changeMode = (mymode) => {
