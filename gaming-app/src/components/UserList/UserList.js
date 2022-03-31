@@ -32,6 +32,7 @@ function UserList() {
   const requestKey = getSessionStorage("sessionId");
   const { isMulti, setIsmulti } = useContext(toMultiplayer);
 
+  //-Redirects to multiplayer at senders side
   useEffect(() => {
     onValue(ref(db, `Invites/${requestKey}`), (data) => {
       const request = data.val();
@@ -43,7 +44,7 @@ function UserList() {
         request.from.email === myUser.email
       ) {
         setIsmulti(true);
-        <Navigate to={request.game} />;
+        <Navigate to={`dashboard/${request.game}`} />;
       }
     });
   }, [requestKey, myUser.email, requestId, setIsmulti]);
@@ -78,6 +79,24 @@ function UserList() {
     });
   }, [myUser.email, requestKey, requestId]);
 
+  //-Expires sent request
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (requestId) {
+        readFireBase("Invites", `${requestId}/to`).then((res) => {
+          console.log("noti", res);
+          updateFireBase("UserList", res.to.email, "invite_expire", requestId);
+        });
+        updateFireBase("Invites", requestId, "request_status", "expire");
+        // updateFireBase("Invites", requestId, "to", "");
+        removeFromSession("sessionId");
+      }
+    }, 60000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [requestId]);
+
   //-Checks active users and displays
   useEffect(() => {
     let active = [];
@@ -102,24 +121,6 @@ function UserList() {
       setActiveUsers({});
     };
   }, [myUser.email]);
-
-  //-Expires sent request
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (requestId) {
-        readFireBase("Invites", `${requestId}/to`).then((res) => {
-          updateFireBase("UserList", res.email, "invite_expire", requestId);
-        });
-        updateFireBase("Invites", requestId, "request_status", "expire");
-        updateFireBase("Invites", requestId, "to", "");
-        removeFromSession("sessionId");
-        closeModal();
-      }
-    }, 60000);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [requestId]);
 
   //-sends request and updates firebase and stores key in session
   const sendRequest = (actUserEmail, actUserName) => {

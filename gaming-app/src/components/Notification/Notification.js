@@ -4,11 +4,15 @@ import Snackbar from "@mui/material/Snackbar";
 import { toMultiplayer } from "App";
 import { onValue, ref } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
+import { Navigate } from "react-router-dom";
+import {
+  readFireBase,
+  updateFireBase,
+} from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
 import {
   getSessionStorage,
+  removeFromSession,
   setSessionStorage,
 } from "utils/Storage/SessionStorage";
 
@@ -43,10 +47,11 @@ function Notification(props) {
     };
   }, [requestId]);
 
+  //-checks at reciever side if request is accepted
   useEffect(() => {
     if (requestId && reqData) {
       let invite = reqData[requestId];
-      // console.log(invite.to.email === myUser.email);
+      console.log(invite);
       if (
         invite &&
         invite.to.email === myUser.email &&
@@ -72,36 +77,6 @@ function Notification(props) {
     }
   }, [reqData, requestKey, myUser.email, props, setIsmulti, requestId]);
 
-  // useEffect(() => {
-  //   reqData &&
-  //     Object.values(reqData).forEach((invite, i) => {
-  //       console.log(invite.to.email === myUser.email);
-  //       if (
-  //         ((invite.requestId === requestKey &&
-  //           invite.from.email === myUser.email) ||
-  //           invite.to.email === myUser.email) &&
-  //         invite.request_status === "accept"
-  //       ) {
-  //         setSessionStorage("sessionId", invite.requestId);
-  //         updateFireBase('Invites', requestKey, 'requestAccept', true);
-  //         updateFireBase("GameSession", requestKey, "players", {
-  //           player1: invite.from,
-  //           player2: invite.to,
-  //         });
-  //         setIsmulti(true);
-  //       } else if (
-  //         invite.to.email === myUser.email &&
-  //         invite.request_status === "pending"
-  //       ) {
-  //         setOpen(true);
-  //         setGame(invite.game);
-  //         setSender(invite.from);
-  //         setRequestId(invite.requestId);
-
-  //       }
-  //     });
-  // }, [reqData, requestKey, myUser.email, props, setIsmulti]);
-
   //-Expires the request after 1 min
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -115,6 +90,7 @@ function Notification(props) {
     };
   }, [open, requestId]);
 
+  //-Accepts request and sets session id and multi is made true and navigates
   const acceptRequest = () => {
     updateFireBase("Invites", requestId, "request_status", "accept");
     updateFireBase("Invites", requestId, "requestAccept", true);
@@ -130,9 +106,6 @@ function Notification(props) {
     updateFireBase("Invites", requestId, "to", "");
     setOpen(false);
   };
-
-
-
 
   const action = (
     <React.Fragment>
