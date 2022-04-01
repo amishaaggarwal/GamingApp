@@ -160,7 +160,6 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
           }
           break;
         case "total_games":
-          newKey = newKey.replace(/[^a-zA-Z/\d]/g, "");
           readFireBase("GameID", `tic-tac/total_games`).then((res) => {
             let newval = res ? parseInt(res) : 0;
             update(ref(db, `${endpoint}/${newKey}`), {

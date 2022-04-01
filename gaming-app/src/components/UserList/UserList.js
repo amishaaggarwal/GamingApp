@@ -78,14 +78,13 @@ function UserList() {
           updateFireBase("UserList", res.email, "invite_expire", requestKey);
         });
         closeModal();
-        removeFromSession("sessionId")
+        removeFromSession("sessionId");
       }
     });
   }, [myUser.email, requestKey]);
 
   //-Expires sent request
   useEffect(() => {
-    
     const timeout = setTimeout(() => {
       if (requestId) {
         readFireBase("Invites", `${requestId}/to`).then((res) => {
