@@ -9,7 +9,7 @@ export const readFirebase = async (endpoint, path) => {
 
 export const updateFirebase = (endpoint, newId, keys, value) => {
   switch (endpoint) {
-    case "Game":
+    case "GameSession":
       switch (keys) {
         case "ballX":
           update(ref(db, `${endpoint}/${newId}/gamestate/ball`), {
@@ -61,6 +61,7 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
             y: value,
           });
           break;
+          
         default: break;
       }
       break;

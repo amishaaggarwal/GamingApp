@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import LeaderBoard from "components/LeaderBoard/LeaderBoard";
 import UserList from "components/UserList/UserList";
-import { onValue, ref, set } from "firebase/database";
+import { onValue, ref } from "firebase/database";
 import { db } from "Games/Ping-Pong/Firebase/firebaseconfig.js";
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
@@ -13,12 +13,8 @@ function Startscreen(props) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState(null);
   const [ishared, setIshared] = useState(false);
-  const [isLoggedin, setIsLoggedin] = useState(false);
   const [uID, setUID] = useState();
   const navigate = useNavigate();
-
-  let wWidth = window.innerWidth;
-  let wHeight = window.innerHeight;
 
   const { gameid } = useParams();
 
@@ -39,77 +35,6 @@ function Startscreen(props) {
       setUID(uid());
     }
   }, [gameid, uID]);
-
-  // const gameSessionUrl = window.location.href;
-
-  // const provider = new GoogleAuthProvider();
-
-  // const signInWithGoggle = () => {
-  //   signInWithPopup(auth, provider)
-  //     .then((result) => {
-  //       setIsLoggedin(true);
-
-  //       setInSession(
-  //         "user",
-  //         JSON.stringify({
-  //           name: result.user.displayName,
-  //           email: result.user.email,
-  //         })
-  //       );
-
-  //       set(ref(db, `Game/${uID}`), {
-  //         players: {
-  //           player1: {
-  //             name: !ishared
-  //               ? result.user.displayName
-  //               : data.players.player1.name,
-  //             email: !ishared ? result.user.email : data.players.player1.email,
-  //           },
-  //           player2: {
-  //             name: ishared ? result.user.displayName : "",
-  //             email: ishared ? result.user.email : "",
-  //           },
-  //         },
-
-  //         gamestate: {
-  //           ball: {
-  //             x: wWidth / 2,
-  //             y: wHeight / 2.15,
-  //           },
-  //           player1_paddle: {
-  //             y: wHeight / 2.5,
-  //           },
-  //           player2_paddle: {
-  //             y: wHeight / 2.5,
-  //           },
-  //           score: {
-  //             player1_score: 0,
-  //             player2_score: 0,
-  //           },
-  //           ballspeed: {
-  //             x: 0,
-  //             y: 0,
-  //           },
-  //         },
-  //         start: false,
-  //         winner: {},
-  //       });
-
-  //       let newUserID = result.user.email.replace(/[^a-zA-Z/\d]/g, "");
-
-  //       update(ref(db, `UserList/${newUserID}`), {
-  //         name: result.user.displayName,
-  //         email: result.user.email,
-  //         dp: result.user.photoURL,
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       toast.error(error.message, {
-  //         theme: "dark",
-  //         position: "top-center",
-  //       });
-  //     });
-  // };
 
   //-selects mode
   const changeMode = (mode) => {
