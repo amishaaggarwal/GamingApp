@@ -68,11 +68,11 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
 
     case "Invites":
       {
-        console.log("here");
+       
         let req_id = newId;
         switch (keys) {
           case "request_status":
-            console.log("here");
+
             update(ref(db, `${endpoint}/${req_id}`), {
               request_status: value,
             });
@@ -97,7 +97,7 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
     default:
       break;
     case "GameID":
-      console.log(newId);
+
       switch (keys) {
         case "gameSessionList":
           {
@@ -162,7 +162,7 @@ export const updateFirebase = (endpoint, newId, keys, value) => {
       }
       break;
     case "UserList":
-      console.log(newId);
+   
       newId = newId.replace(/[^a-zA-Z/\d]/g, "");
       switch (keys) {
         case "name":

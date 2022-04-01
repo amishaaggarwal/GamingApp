@@ -1,18 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Routing from 'util/Routes/Routing';
-import './index.css';
-import { ToastContainer } from "react-toastify";
+import App from "Games/Ping-Pong/App";
+import React from "react";
+import ReactDOM from "react-dom";
 import "react-toastify/dist/ReactToastify.css";
-import reportWebVitals from './reportWebVitals';
-import Playground from './Pages/Playground/Playground';
-import App from 'Games/Ping-Pong/App';
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

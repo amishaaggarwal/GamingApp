@@ -13,9 +13,9 @@ import "./DashBoard.scss";
 
 function DashBoard() {
   const [chooseGame, setchooseGame] = useState(false);
-  // const value = { isMulti, setIsmulti };
   const { isMulti, setIsmulti } = useContext(toMultiplayer);
 
+  //- for selecting multiplayer mode
   useEffect(() => {
     if (isMulti) setchooseGame(isMulti);
   }, [chooseGame, isMulti]);
