@@ -1,16 +1,5 @@
-import { child, get, onValue, ref, update } from "firebase/database";
+import { child, get, ref, update } from "firebase/database";
 import { db } from "./FirebaseSetup";
-
-
-//-function for onvalue
-export const onValueFirebase = async (endpoint, path) => {
-  let data;
-  console.log("in func");
-  onValue(ref(db, `${endpoint}/${path}`), (res) => {
-    data=res.val();
-  });
-  return await data;
-}
 
 //-function for reading firebase data
 export const readFireBase = async (endpoint, path) => {
@@ -94,7 +83,7 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
             let newval;
             readFireBase("UserList", `${newKey}/invite_id`).then((res) => {
               newval = res ? res : [];
-              newval = newval.filter((f)=> {
+              newval = newval.filter((f) => {
                 return f !== value;
               });
 

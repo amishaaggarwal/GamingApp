@@ -5,9 +5,12 @@ import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import { toMultiplayer } from "App";
 import { child, onValue, push, ref } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
 import Modal from "react-modal";
+import { Navigate, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   readFireBase,
   updateFireBase,
@@ -18,10 +21,7 @@ import {
   removeFromSession,
   setSessionStorage,
 } from "utils/Storage/SessionStorage";
-import { toast } from "react-toastify";
 import "./UserList.scss";
-import { Navigate, useNavigate } from "react-router-dom";
-import { toMultiplayer } from "App";
 
 function UserList() {
   const [activeUsers, setActiveUsers] = useState({});
@@ -42,11 +42,10 @@ function UserList() {
         request.requestAccept &&
         request.request_status === "accept" &&
         request.from.email === myUser.email
-        ) {
-        console.log('dekh le');
+      ) {
         setIsmulti(true);
         // navigate(`${request.game}`, { replace: true });
-        <Navigate to={`dashboard/${request.game}`}  />;
+        <Navigate to={`dashboard/${request.game}`} />;
       }
     });
   }, [requestKey, myUser.email, requestId, setIsmulti, navigate]);
@@ -61,11 +60,10 @@ function UserList() {
     setOpen(false);
   };
 
-  //-Listens to denied requests
+  //-Listens to rejected requests
   useEffect(() => {
     onValue(ref(db, `Invites/${requestKey}`), (data) => {
       const invite = data.val();
-
       if (
         invite &&
         invite.requestId === requestKey &&
@@ -75,23 +73,27 @@ function UserList() {
         toast.warn(`${invite.to.email} denied your game request!`, {
           theme: "dark",
         });
-        updateFireBase("Invites", requestId, "request_status", "expire");
+        updateFireBase("Invites", requestKey, "request_status", "expire");
+        readFireBase("Invites", `${requestKey}/to`).then((res) => {
+          updateFireBase("UserList", res.email, "invite_expire", requestKey);
+        });
         closeModal();
+        removeFromSession("sessionId")
       }
     });
-  }, [myUser.email, requestKey, requestId]);
+  }, [myUser.email, requestKey]);
 
   //-Expires sent request
   useEffect(() => {
+    
     const timeout = setTimeout(() => {
       if (requestId) {
         readFireBase("Invites", `${requestId}/to`).then((res) => {
-          console.log("noti", res);
-          updateFireBase("UserList", res.to.email, "invite_expire", requestId);
+          updateFireBase("UserList", res.email, "invite_expire", requestId);
         });
         updateFireBase("Invites", requestId, "request_status", "expire");
-        // updateFireBase("Invites", requestId, "to", "");
         removeFromSession("sessionId");
+        closeModal();
       }
     }, 60000);
     return () => {
@@ -151,7 +153,6 @@ function UserList() {
     updateFireBase("Invites", requestId, "request_status", "cancel");
     updateFireBase("Invites", requestId, "from", myUser.email);
     updateFireBase("Invites", requestId, "to", "");
-
     closeModal();
   };
 

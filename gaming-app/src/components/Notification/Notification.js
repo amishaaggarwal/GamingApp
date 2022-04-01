@@ -6,11 +6,14 @@ import { onValue, ref } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import {
-  updateFireBase
+  readFireBase,
+  updateFireBase,
 } from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
 import {
-  getSessionStorage, setSessionStorage
+  getSessionStorage,
+  removeFromSession,
+  setSessionStorage,
 } from "utils/Storage/SessionStorage";
 
 function Notification(props) {
@@ -59,7 +62,7 @@ function Notification(props) {
       ) {
         setSessionStorage("sessionId", invite.requestId);
         updateFireBase("Invites", requestKey, "requestAccept", true);
-        
+
         updateFireBase("GameSession", requestKey, "players", {
           player1: invite.from,
           player2: invite.to,
@@ -80,11 +83,16 @@ function Notification(props) {
 
   //-Expires the request after 1 min
   useEffect(() => {
+    
     const timeout = setTimeout(() => {
-      setOpen(false);
       if (requestId) {
+        readFireBase("Invites", `${requestId}/to`).then((res) => {
+          updateFireBase("UserList", res.email, "invite_expire", requestId);
+        });
         updateFireBase("Invites", requestId, "request_status", "expire");
+        removeFromSession("sessionId")
       }
+      setOpen(false);
     }, 60000);
     return () => {
       clearTimeout(timeout);
@@ -104,13 +112,12 @@ function Notification(props) {
     ) : (
       <Navigate to={reqData.game} />
     );
-
   };
 
   //-Rejects requests
   const rejectRequest = () => {
     updateFireBase("Invites", requestId, "request_status", "reject");
-    updateFireBase("Invites", requestId, "to", "");
+    updateFireBase("Invites", requestId, "requestAccept", false);
     setOpen(false);
   };
 
