@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sketch from "react-p5";
-import { onValue, ref, set} from "firebase/database";
+import { onValue, ref, update } from "firebase/database";
 import { db } from "Games/Ping-Pong/Firebase/firebaseconfig.js";
 import { updateFirebase } from "Games/Ping-Pong/Firebase/updateFirebase.js";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -28,63 +28,57 @@ function Multiplayer(props) {
   const [PaddleY2, setPaddleY2] = useState(wHeight / 2.5);
   const [player1_score, setPlayer1_Score] = useState(0);
   const [player2_score, setPlayer2_Score] = useState(0);
-  const [isWinner, setWinner] = useState({});
+  const [isWinner, setWinner] = useState(null);
   const [speedx, setSpeedX] = useState(0);
   const [speedy, setSpeedY] = useState(0);
   const [p5Btn, setP5Btn] = useState({});
   const [themeType, setThemeType] = useState("light theme");
   const [startNexit, setStartNexit] = useState("start");
-  const gameSessionId = getFromSession('sessionId');
-  // const [resetBtn, setResetBtn] = useState(true);
+  const gameSessionId = getFromSession("sessionId");
 
   const navigate = useNavigate();
-
-  // let resetGame = state.reset;
-  // let gameSessionId = props.gameSessionId;
 
   let PaddleX;
   let PaddleX2;
   let dir = [1, -1];
 
   useEffect(() => {
+    update(ref(db, `GameSession/${gameSessionId}`), {
+      gamestate: {
+        ball: {
+          x: wWidth / 2,
+          y: wHeight / 2.15,
+        },
+        player1_paddle: {
+          y: wHeight / 2.5,
+        },
+        player2_paddle: {
+          y: wHeight / 2.5,
+        },
+        score: {
+          player1_score: 0,
+          player2_score: 0,
+        },
+        ballspeed: {
+          x: 0,
+          y: 0,
+        },
+      },
 
-    set(ref(db, `GameSession/${gameSessionId}`), {
-          gamestate: {
-            ball: {
-              x: wWidth / 2,
-              y: wHeight / 2.15,
-            },
-            player1_paddle: {
-              y: wHeight / 2.5,
-            },
-            player2_paddle: {
-              y: wHeight / 2.5,
-            },
-            score: {
-              player1_score: 0,
-              player2_score: 0,
-            },
-            ballspeed: {
-              x: 0,
-              y: 0,
-            },
-          },
-          start: false,
-          winner: {},
-        });
-    return () => {
-    }
-  }, [gameSessionId, wWidth, wHeight])
-  
+      start: false,
+      winner: "",
+    });
+    return () => {};
+  }, [gameSessionId, wWidth, wHeight]);
 
   useEffect(() => {
     onValue(ref(db, `GameSession/${gameSessionId}`), (snapshot) => {
       const data = snapshot.val();
       console.log(data);
-      // setPlayer1_Email(data.players.player1.email);
-      // setPlayer2_Email(data.players.player2.email);
-      // setPlayer1_Name(data.players.player1.name);
-      // setPlayer2_Name(data.players.player2.name);
+      setPlayer1_Email(data.players.player1.email);
+      setPlayer2_Email(data.players.player2.email);
+      setPlayer1_Name(data.players.player1.name);
+      setPlayer2_Name(data.players.player2.name);
       setStartGame(data.start);
       setWinner(data.winner);
       setBallX(data.gamestate.ball.x);
@@ -97,24 +91,6 @@ function Multiplayer(props) {
       setSpeedY(data.gamestate.ballspeed.y);
     });
   }, [gameSessionId]);
-
-  //////////////game reset
-  // useEffect(() => {
-  //   if (resetGame && resetBtn) {
-  //     updateFirebase('GameSession',"ballX", wWidth / 2, gameSessionId);
-  //     updateFirebase('GameSession',"ballY", wHeight / 2.15, gameSessionId);
-  //     updateFirebase('GameSession',"player1_score", 0, gameSessionId);
-  //     updateFirebase('GameSession',"player2_score", 0, gameSessionId);
-  //     updateFirebase('GameSession',"speedx", 0, gameSessionId);
-  //     updateFirebase('GameSession',"speedy", 0, gameSessionId);
-  //     updateFirebase('GameSession',"winner", null, gameSessionId);
-  //     updateFirebase('GameSession',"start", false, gameSessionId);
-  //     updateFirebase('GameSession',"PaddleY", wHeight / 2.5, gameSessionId);
-  //     updateFirebase('GameSession',"PaddleY2", wHeight / 2.5, gameSessionId);
-
-  //     return () => setResetBtn(false);
-  //   }
-  // }, [gameSessionId, resetGame, resetBtn, wWidth, wHeight]);
 
   const setup = (p) => {
     p.canvas = p.createCanvas(wWidth, wHeight);
@@ -132,11 +108,6 @@ function Multiplayer(props) {
     PaddleX = wWidth / 20;
     PaddleX2 = wWidth / 1.067;
 
-    ///////// fps display for debugging fps issue
-    // let fps = p.frameRate();
-    // p.fill(255);
-    // p.text("FPS: " + fps.toFixed(2), wWidth / 3.5, wHeight / 19);
-
     ////////// borders
     p.strokeWeight(4);
     p.line(wWidth / 2, wHeight / 7.5, wWidth / 2, wHeight / 1.21); // middle line
@@ -147,8 +118,8 @@ function Multiplayer(props) {
     p.strokeWeight(2);
 
     //////// updating ball position
-    updateFirebase('GameSession', gameSessionId, "ballX", ballX + speedx);
-    updateFirebase('GameSession', gameSessionId, "ballY", ballY + speedy);
+    updateFirebase("GameSession", gameSessionId, "ballX", ballX + speedx);
+    updateFirebase("GameSession", gameSessionId, "ballY", ballY + speedy);
 
     /////// themes
     if (themeType === "dark") {
@@ -176,7 +147,7 @@ function Multiplayer(props) {
 
     p.textSize(wWidth / 45);
     p.fill(255, 255, 180);
-    p.text(`score: ${player1_score}`, wWidth /4.5, wHeight / 19);
+    p.text(`score: ${player1_score}`, wWidth / 4.5, wHeight / 19);
 
     p.textSize(wWidth / 45);
     p.fill(255, 255, 180);
@@ -198,14 +169,10 @@ function Multiplayer(props) {
 
     ///////////////// set winner
     if (player1_score === 10) {
-      updateFirebase(
-        'GameSession', gameSessionId,
-        "winner",
-        {
-          name: player1_name,
-          email: player1_email,
-        }
-      );
+      updateFirebase("GameSession", gameSessionId, "winner", {
+        name: player1_name,
+        email: player1_email,
+      });
     } else if (player2_score === 10) {
       updateFirebase("GameSession", gameSessionId, "winner", {
         name: player2_name,
@@ -215,16 +182,26 @@ function Multiplayer(props) {
 
     ////////////// boundary checks
     if (ballX >= wWidth / 1.05) {
-      updateFirebase('GameSession', gameSessionId, "speedy", 0);
+      updateFirebase("GameSession", gameSessionId, "speedy", 0);
       updateFirebase("GameSession", gameSessionId, "ballX", wWidth / 2);
       updateFirebase("GameSession", gameSessionId, "ballY", wHeight / 2.15);
-      updateFirebase("GameSession", gameSessionId, "player1_score", player1_score + 1);
+      updateFirebase(
+        "GameSession",
+        gameSessionId,
+        "player1_score",
+        player1_score + 1
+      );
     }
     if (ballX <= wWidth / 20) {
-      updateFirebase('GameSession',"speedy", 0);
-      updateFirebase('GameSession',"ballX", wWidth / 2);
+      updateFirebase("GameSession", "speedy", 0);
+      updateFirebase("GameSession", "ballX", wWidth / 2);
       updateFirebase("GameSession", gameSessionId, "ballY", wHeight / 2.15);
-      updateFirebase("GameSession", gameSessionId, "player2_score", player2_score + 1);
+      updateFirebase(
+        "GameSession",
+        gameSessionId,
+        "player2_score",
+        player2_score + 1
+      );
     }
 
     if (ballY > wHeight / 1.25) {
@@ -265,12 +242,22 @@ function Multiplayer(props) {
         );
       } else {
         if (PaddleY2 - 15 >= wHeight / 7.1 && p.keyIsDown(p.UP_ARROW)) {
-          updateFirebase("GameSession", gameSessionId, "PaddleY2", PaddleY2 - 15);
+          updateFirebase(
+            "GameSession",
+            gameSessionId,
+            "PaddleY2",
+            PaddleY2 - 15
+          );
         } else if (
           PaddleY2 + 15 <= wHeight / 1.47 &&
           p.keyIsDown(p.DOWN_ARROW)
         ) {
-          updateFirebase("GameSession", gameSessionId, "PaddleY2", PaddleY2 + 15);
+          updateFirebase(
+            "GameSession",
+            gameSessionId,
+            "PaddleY2",
+            PaddleY2 + 15
+          );
         }
       }
     }
@@ -302,7 +289,8 @@ function Multiplayer(props) {
     );
 
     if (hitleft || hitright) {
-      if (hitleft) updateFirebase("GameSession", gameSessionId, "ballX", ballX + 20);
+      if (hitleft)
+        updateFirebase("GameSession", gameSessionId, "ballX", ballX + 20);
       else updateFirebase("GameSession", gameSessionId, "ballX", ballX - 20);
 
       updateFirebase("GameSession", gameSessionId, "speedx", (speedx + 1) * -1);
@@ -355,14 +343,10 @@ function Multiplayer(props) {
           email: player2_email,
         });
       } else {
-        updateFirebase(
-          'GameSession', gameSessionId,
-          "winner",
-          {
-            name: player1_name,
-            email: player1_email,
-          }
-        );
+        updateFirebase("GameSession", gameSessionId, "winner", {
+          name: player1_name,
+          email: player1_email,
+        });
       }
       exitFromGameSession();
     }
@@ -386,17 +370,17 @@ function Multiplayer(props) {
 
   const checkWinner = () => {
     if (isWinner && isWinner.email === user.email) {
-      // props.parentCallback('winning')
-      
+      console.log(isWinner);
+      props.parentCallback("winning");
     } else if (isWinner) {
-      // props.parentCallback("loosing");
-      
+      console.log(isWinner);
+
+      props.parentCallback("loosing");
     }
   };
 
   return (
     <div className="playing-page">
-     
       <Sketch setup={setup} draw={draw}></Sketch>
     </div>
   );

@@ -9,6 +9,8 @@ import { uid } from "uid";
 import { setSessionStorage } from 'utils/Storage/SessionStorage';
 import './Playground.scss'
 import { toMultiplayer } from 'App'
+import WinningScreen from 'Games/Ping-Pong/components/WinningScreen/WinningScreen';
+import LoosingScreen from 'Games/Ping-Pong/components/LoosingScreen/LoosingScreen';
 
 function Playground() {
     const [toHere, setToHere] = useState('');
@@ -22,7 +24,7 @@ function Playground() {
     
    const handleMultiplayer = useCallback(() => {
      handleCallback("multiplayer");
-    //  setIsmulti(false);
+     setIsmulti(false);
      // readFireBase("Invites", `${sessionId}`).then((res) => {
      //   let players = {
      //     player1: res.from,
@@ -30,7 +32,7 @@ function Playground() {
      //   };
      //   updateFireBase("GameSession", sessionId, "players", players);
      // });
-   }, []);
+   }, [setIsmulti]);
 
 
   useEffect(() => {
@@ -42,10 +44,14 @@ function Playground() {
     const switchMode = (param) => {
         switch (param) {
           case "singleplayer":
-            setSessionStorage('singleplayGameId', uid());
+            setSessionStorage("singleplayGameId", uid());
             return <Singleplayer parentCallback={handleCallback} />;
           case "multiplayer":
-            return <Multiplayer  parentCallback={handleCallback} />;
+            return <Multiplayer parentCallback={handleCallback} />;
+          case "winning":
+            return <WinningScreen parentCallback={handleCallback} />;
+          case "loosing":
+            return <LoosingScreen parentCallback={handleCallback} />;
           default:
             return <Startscreen parentCallback={handleCallback} />;
         }
@@ -59,8 +65,7 @@ function Playground() {
     return (
       <div className="Playground">
         {switchMode(toHere)}
-        <DrawerLeft  />
-        {/* <Notification parentCallback={handleCallback} /> */}
+      
       </div>
     );
 }
