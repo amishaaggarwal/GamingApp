@@ -1,20 +1,13 @@
 import { toMultiplayer } from "App";
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import {
-  readFireBase,
-  updateFireBase,
-} from "utils/firebaseSetup/firebaseFunctions";
-import { getSessionStorage } from "utils/Storage/SessionStorage";
 import Footer from "../../components/Footer/Footer";
 import ModeSelect from "../../components/ModeSelect/ModeSelect";
 import Multiplayer from "../../components/Multiplayer/Multiplayer";
 import TicTacGridSinglePlayer from "../../components/TicTacGridSinglePlayer/TicTacGridSinglePlayer";
-
 import "./Playscreen.scss";
 
 function PlayScreen() {
   const [childData, setChildData] = useState("");
-  const sessionId = getSessionStorage("sessionId");
   const { isMulti, setIsmulti } = useContext(toMultiplayer);
 
   //-Parent Callback to conditionally render pages
@@ -29,16 +22,18 @@ function PlayScreen() {
     }
   };
 
+  //-sets multi false and switches to multiplayer page
   const handleMultiplayer = useCallback(() => {
     handleCallback("multiplayer");
     setIsmulti(false);
   }, [setIsmulti]);
 
+  //-Reads if the multiplayer mode is selected
   useEffect(() => {
-    console.log(isMulti);
     isMulti && handleMultiplayer();
   }, [isMulti, handleMultiplayer]);
 
+  //-reads parent callback
   const handleCallback = (childData) => {
     setChildData(childData);
   };
