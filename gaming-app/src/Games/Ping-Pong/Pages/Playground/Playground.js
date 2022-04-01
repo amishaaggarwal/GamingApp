@@ -1,7 +1,7 @@
 
-import React, { useState, useContext, useEffect } from 'react'
-import Singleplayer from '../../components/Playscreen/singleplayer/Singleplayer';
-import Multiplayer from "../../components/Playscreen/multiplayer/Multiplayer";
+import React, { useState, useContext, useEffect, useCallback } from 'react'
+import Singleplayer from '../../components/singleplayer/Singleplayer';
+import Multiplayer from "../../components/multiplayer/Multiplayer";
 import Startscreen from '../../components/Startscreen/Startscreen'
 import DrawerLeft from 'components/DrawerLeft/DrawerLeft';
 import Notification from 'components/Notification/Notification';
@@ -15,11 +15,28 @@ function Playground() {
     const { isMulti, setIsmulti } = useContext(toMultiplayer);
 
     
-    useEffect(() => {
-      console.log('in playground');
-      if(isMulti) setToHere('multiplayer');    
-    }, [isMulti])
+    // useEffect(() => {
+    //   console.log('in playground');
+    //   if(isMulti) setToHere('multiplayer');    
+    // }, [isMulti])
     
+   const handleMultiplayer = useCallback(() => {
+     handleCallback("multiplayer");
+    //  setIsmulti(false);
+     // readFireBase("Invites", `${sessionId}`).then((res) => {
+     //   let players = {
+     //     player1: res.from,
+     //     player2: res.to,
+     //   };
+     //   updateFireBase("GameSession", sessionId, "players", players);
+     // });
+   }, []);
+
+
+  useEffect(() => {
+    console.log(isMulti);
+    isMulti && handleMultiplayer();
+  }, [isMulti, handleMultiplayer]);
 
 
     const switchMode = (param) => {
@@ -35,6 +52,7 @@ function Playground() {
     }
 
     const handleCallback = (childData) => {
+      console.log(childData);
         setToHere(childData);
     };
 
@@ -42,7 +60,7 @@ function Playground() {
       <div className="Playground">
         {switchMode(toHere)}
         <DrawerLeft  />
-        <Notification parentCallback={handleCallback} />
+        {/* <Notification parentCallback={handleCallback} /> */}
       </div>
     );
 }

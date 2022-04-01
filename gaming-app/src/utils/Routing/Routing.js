@@ -12,6 +12,7 @@ function Routing() {
       <Route path="/" element={<Login />} />
       <Route
         path="/dashboard"
+        
         element={
           <PrivateRoute>
             {<DashBoard />}

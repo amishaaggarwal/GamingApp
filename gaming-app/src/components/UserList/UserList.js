@@ -20,7 +20,7 @@ import {
 } from "utils/Storage/SessionStorage";
 import { toast } from "react-toastify";
 import "./UserList.scss";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { toMultiplayer } from "App";
 
 function UserList() {
@@ -30,24 +30,26 @@ function UserList() {
   const [requestId, setRequestId] = useState("");
   const gameName = window.location.href.split("/").slice(-1)[0];
   const requestKey = getSessionStorage("sessionId");
+  const navigate = useNavigate();
   const { isMulti, setIsmulti } = useContext(toMultiplayer);
 
   //-Redirects to multiplayer at senders side
   useEffect(() => {
     onValue(ref(db, `Invites/${requestKey}`), (data) => {
       const request = data.val();
-      console.log(request, requestKey);
       if (
         request &&
         request.requestAccept &&
         request.request_status === "accept" &&
         request.from.email === myUser.email
-      ) {
+        ) {
+        console.log('dekh le');
         setIsmulti(true);
-        <Navigate to={`dashboard/${request.game}`} />;
+        // navigate(`${request.game}`, { replace: true });
+        <Navigate to={`dashboard/${request.game}`}  />;
       }
     });
-  }, [requestKey, myUser.email, requestId, setIsmulti]);
+  }, [requestKey, myUser.email, requestId, setIsmulti, navigate]);
 
   //-opens lost modal
   const openModal = () => {

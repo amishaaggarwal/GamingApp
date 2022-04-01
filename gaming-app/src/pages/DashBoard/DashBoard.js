@@ -8,6 +8,8 @@ import Header from "components/Header/Header";
 import LeaderBoard from "components/LeaderBoard/LeaderBoard";
 import Notification from "components/Notification/Notification";
 import UserList from "components/UserList/UserList";
+import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import "./DashBoard.scss";
 
@@ -16,7 +18,7 @@ function DashBoard() {
   const [chooseGame, setchooseGame] = useState(false);
   // const value = { isMulti, setIsmulti };
   const { isMulti, setIsmulti } = useContext(toMultiplayer);
-
+const navigate = useNavigate();
   useEffect(() => {
     if(isMulti) setchooseGame(isMulti);
   }, [chooseGame, isMulti])
@@ -37,7 +39,7 @@ function DashBoard() {
         <Header />
         <div direction="row" spacing={1} className="center-body">
           <GameSlider />
-          <LeaderBoard />
+          {/* <LeaderBoard /> */}
         </div>
         <div direction="row" spacing={1} className="center-body">
           <UserList />
