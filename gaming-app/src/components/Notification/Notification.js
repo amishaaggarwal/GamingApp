@@ -7,13 +7,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import {
   readFireBase,
-  updateFireBase,
+  updateFireBase
 } from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
 import {
-  getSessionStorage,
-  removeFromSession,
-  setSessionStorage,
+  getSessionStorage, setSessionStorage
 } from "utils/Storage/SessionStorage";
 
 function Notification(props) {
@@ -83,14 +81,12 @@ function Notification(props) {
 
   //-Expires the request after 1 min
   useEffect(() => {
-    
     const timeout = setTimeout(() => {
       if (requestId) {
         readFireBase("Invites", `${requestId}/to`).then((res) => {
           updateFireBase("UserList", res.email, "invite_expire", requestId);
         });
         updateFireBase("Invites", requestId, "request_status", "expire");
-        removeFromSession("sessionId")
       }
       setOpen(false);
     }, 60000);

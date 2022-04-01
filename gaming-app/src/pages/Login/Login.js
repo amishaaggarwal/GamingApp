@@ -57,7 +57,6 @@ export default function Login() {
   const register = async () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(user);
 
       updateProfile(auth.currentUser, {
         displayName: username,
@@ -92,7 +91,7 @@ export default function Login() {
       toast.success(`Logged-in Success!`, {
         theme: "dark",
       });
-      console.log(user);
+     
       redirectTo("/dashboard");
     } catch (error) {
       let index = error.message.indexOf("/");
@@ -158,7 +157,6 @@ export default function Login() {
     signInWithPopup(auth, FBprovider)
       .then((result) => {
         const user = result.user.providerData[0];
-        console.log(user);
         toast.success(`Logged-in Success!`, {
           theme: "dark",
         });
@@ -176,7 +174,6 @@ export default function Login() {
         redirectTo("/dashboard");
       })
       .catch((error) => {
-        console.log(error);
         toast.error(`${error.code}:${error.message}`, {
           theme: "dark",
           position: "top-center",

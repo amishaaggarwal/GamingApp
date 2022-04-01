@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import LoosingScreen from "Games/Ping-Pong/components/LoosingScreen/LoosingScreen";
+import WinningScreen from "Games/Ping-Pong/components/WinningScreen/WinningScreen";
 import { ballHit } from "Games/Ping-Pong/util/ballHitPaddle";
 import { aiMove } from "Games/Ping-Pong/util/comMove";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import Sketch from "react-p5";
+import { useNavigate } from "react-router-dom";
 import "./Singleplayer.scss";
-import WinningScreen from "Games/Ping-Pong/components/WinningScreen/WinningScreen";
-import LoosingScreen from "Games/Ping-Pong/components/LoosingScreen/LoosingScreen";
 
 function Singleplayer(props) {
   const [winner, setWinner] = useState("");
@@ -43,11 +43,11 @@ function Singleplayer(props) {
   let deficulty;
 
   const setWinnerName = (val) => {
-    if(val === 'back') {
-      props.parentCallback('');
+    if (val === "back") {
+      props.parentCallback("");
     }
     setWinner(val);
-  }
+  };
   const navigate = useNavigate();
 
   const setup = (p) => {
@@ -137,7 +137,6 @@ function Singleplayer(props) {
     if (winPlayer) {
       if (winPlayer === "you") {
         setWinnerName("you");
-        // setWinner("you");
       } else {
         setWinnerName("computer");
       }
@@ -252,13 +251,8 @@ function Singleplayer(props) {
     // if (ballX > wWidth - (200 + Math.floor(Math.random() * followBall))) {
     //   PaddleY2 = aiMove(wHeight / 1.5, wHeight / 7.5, ballY, 0);
     // }
-     if (ballX > wWidth - (200 + Math.floor(Math.random() * followBall))) {
-      PaddleY2 = aiMove(
-        wHeight / 1.5,
-        wHeight / 7.5,
-        ballY,
-        0
-      );
+    if (ballX > wWidth - (200 + Math.floor(Math.random() * followBall))) {
+      PaddleY2 = aiMove(wHeight / 1.5, wHeight / 7.5, ballY, 0);
     }
   };
 
@@ -360,7 +354,6 @@ function Singleplayer(props) {
             winner={player1_name}
             player1_score={player1_score}
             player2_score={player2_score}
-
           />
         ) : (
           <LoosingScreen
