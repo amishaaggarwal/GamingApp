@@ -52,7 +52,8 @@ function LoosingScreen(props) {
       console.log("sin");
     }
   }, [
-    mode,
+    props.mode,
+    uId,
     user.email,
     /*player1_score, player2_score, preGameId, user_email_id*/
   ]);

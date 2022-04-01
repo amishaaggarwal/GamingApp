@@ -4,7 +4,7 @@ import Snackbar from "@mui/material/Snackbar";
 import { toMultiplayer } from "App";
 import { onValue, ref } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import {
   readFireBase,
   updateFireBase,
@@ -24,6 +24,7 @@ function Notification(props) {
   const [sender, setSender] = useState("");
   const [game, setGame] = useState("");
   const requestKey = getSessionStorage("sessionId");
+  const navigate = useNavigate();
   const { isMulti, setIsmulti } = useContext(toMultiplayer);
 
   //-UseEffect to listen to any invites added to particular user
@@ -59,6 +60,7 @@ function Notification(props) {
       ) {
         setSessionStorage("sessionId", invite.requestId);
         updateFireBase("Invites", requestKey, "requestAccept", true);
+        
         updateFireBase("GameSession", requestKey, "players", {
           player1: invite.from,
           player2: invite.to,
@@ -97,7 +99,8 @@ function Notification(props) {
     setSessionStorage("sessionId", requestId);
     setIsmulti(true);
     setOpen(false);
-    <Navigate to={reqData.game} />;
+    navigate(`${reqData.game}`);
+    // <Navigate to={reqData.game} />;
   };
 
   //-Rejects requests

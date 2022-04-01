@@ -32,13 +32,6 @@ function PlayScreen() {
   const handleMultiplayer = useCallback(() => {
     handleCallback("multiplayer");
     setIsmulti(false);
-    // readFireBase("Invites", `${sessionId}`).then((res) => {
-    //   let players = {
-    //     player1: res.from,
-    //     player2: res.to,
-    //   };
-    //   updateFireBase("GameSession", sessionId, "players", players);
-    // });
   }, [setIsmulti]);
 
   useEffect(() => {
