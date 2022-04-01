@@ -11,10 +11,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
-import {
-  onValueFirebase,
-  updateFireBase,
-} from "utils/firebaseSetup/firebaseFunctions";
+import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
 import { getSessionStorage } from "utils/Storage/SessionStorage";
 import DrawScreen from "../../components/DrawScreen/DrawScreen";
@@ -62,17 +59,16 @@ function Multiplayer() {
   const [currentState, setCurrentState] = useState(initialState);
   const [moveNow, setMoveNow] = useState(CROSS);
 
+  //-useEffect runs on mount
   useEffect(() => {
     updateFireBase("GameSession", newKey, "gamestate", initialState);
+    updateFireBase("GameSession", newKey, "current", CROSS);
+    updateFireBase("GameSession", newKey, "lastMove", {
+      position: -1,
+      id: "",
+    });
+    updateFireBase("GameSession", newKey, "winner", "");
   }, [newKey]);
-
-  // useEffect(() => {
-  //   console.log("in useEffect");
-  //   onValueFirebase("GameSession", `${newKey}`).then((res) => {
-  //     console.log(res);
-  //     setUsers(res.players);
-  //   });
-  // }, [newKey]);
 
   //-opens winner modal
   const openWinModal = useCallback(() => {
@@ -108,8 +104,6 @@ function Multiplayer() {
     setLostModalIsOpen(false);
   };
 
-  console.log("i am hereeeeeeeeeeeeee", newKey, users);
-
   //-opens appropriate modal if we have winner,loser or draw
   const showWinner = useCallback(
     (wins) => {
@@ -141,7 +135,6 @@ function Multiplayer() {
           gameid: newKey,
         });
       }
-      console.log(users.player1.email);
     },
     [
       count,
@@ -159,7 +152,7 @@ function Multiplayer() {
   useEffect(() => {
     onValue(ref(db, `GameSession/${newKey}`), (snapshot) => {
       const data = snapshot.val();
-setUsers(data.players);
+      setUsers(data.players);
       setWins(data.winner);
       setCurrentState(data.gamestate);
       setMoveNow(data.current);

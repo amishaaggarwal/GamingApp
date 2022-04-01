@@ -6,14 +6,11 @@ import { onValue, ref } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import {
-  readFireBase,
-  updateFireBase,
+  updateFireBase
 } from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
 import {
-  getSessionStorage,
-  removeFromSession,
-  setSessionStorage,
+  getSessionStorage, setSessionStorage
 } from "utils/Storage/SessionStorage";
 
 function Notification(props) {
@@ -25,6 +22,7 @@ function Notification(props) {
   const [game, setGame] = useState("");
   const requestKey = getSessionStorage("sessionId");
   const navigate = useNavigate();
+  const gameName = window.location.href.split("/").slice(-1)[0];
   const { isMulti, setIsmulti } = useContext(toMultiplayer);
 
   //-UseEffect to listen to any invites added to particular user
@@ -52,7 +50,6 @@ function Notification(props) {
   useEffect(() => {
     if (requestId && reqData) {
       let invite = reqData[requestId];
-      console.log(invite);
       if (
         invite &&
         invite.to.email === myUser.email &&
@@ -98,8 +95,11 @@ function Notification(props) {
     setSessionStorage("sessionId", requestId);
     setIsmulti(true);
     setOpen(false);
-    navigate(`${reqData.game}`);
-    // <Navigate to={reqData.game} />;
+    gameName === "dashboard" ? (
+      navigate(`${reqData.game}`)
+    ) : (
+      <Navigate to={reqData.game} />
+    );
   };
 
   //-Rejects requests
@@ -109,6 +109,7 @@ function Notification(props) {
     setOpen(false);
   };
 
+  //-Action buttons for snackbar
   const action = (
     <React.Fragment>
       <Button variant="contained" onClick={() => rejectRequest()}>
