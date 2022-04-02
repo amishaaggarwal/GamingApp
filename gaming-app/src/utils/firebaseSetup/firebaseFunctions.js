@@ -83,10 +83,9 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
             let newval;
             readFireBase("UserList", `${newKey}/invite_id`).then((res) => {
               newval = res ? res : [];
-              newval = newval.filter((f) => {
-                return f !== value;
-              });
-
+              console.log(res);
+              newval = newval.filter(f => f !== value);
+              console.log(newval);
               update(ref(db, `${endpoint}/${newKey}`), {
                 invite_id: newval,
               });
