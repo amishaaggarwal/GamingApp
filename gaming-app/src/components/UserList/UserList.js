@@ -12,10 +12,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Modal from "react-modal";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import {
-  readFireBase,
-  updateFireBase,
-} from "utils/firebaseSetup/firebaseFunctions";
+import { updateFireBase } from "utils/firebaseSetup/firebaseFunctions";
 import { db, gameListRef } from "utils/firebaseSetup/FirebaseSetup";
 import {
   getSessionStorage,
@@ -45,7 +42,7 @@ function UserList() {
         request.from.email === myUser.email
       ) {
         setIsmulti(true);
-        
+
         <Navigate to={`dashboard/${request.game}`} />;
       }
     });
@@ -60,7 +57,7 @@ function UserList() {
   const closeModal = () => {
     setOpen(false);
   };
-  
+
   //-Listens to rejected requests
   useEffect(() => {
     onValue(ref(db, `Invites/${requestKey}`), (data) => {
@@ -75,7 +72,7 @@ function UserList() {
           theme: "dark",
         });
         updateFireBase("Invites", requestKey, "request_status", "expire");
-       
+
         closeModal();
         removeFromSession("sessionId");
       }
@@ -86,9 +83,6 @@ function UserList() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (requestId) {
-        // readFireBase("Invites", `${requestId}/to`).then((res) => {
-        //   updateFireBase("UserList", res.email, "invite_expire", requestId);
-        // });
         updateFireBase("Invites", requestId, "request_status", "expire");
         removeFromSession("sessionId");
         closeModal();
@@ -161,7 +155,6 @@ function UserList() {
         isOpen={open}
         className="request-cancel"
         overlayClassName="modal-overlay"
-        
       >
         <Button
           className="cancel-btn"

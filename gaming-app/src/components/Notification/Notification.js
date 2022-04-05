@@ -6,13 +6,12 @@ import { onValue, ref } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import {
-  readFireBase,
-  updateFireBase,
+  updateFireBase
 } from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
 import {
   getSessionStorage,
-  setSessionStorage,
+  setSessionStorage
 } from "utils/Storage/SessionStorage";
 
 function Notification() {
@@ -54,7 +53,6 @@ function Notification() {
   useEffect(() => {
     if (requestId && reqData) {
       let invite = reqData[requestId];
-      // console.log(requestId, myUser.email, invite);
       if (
         invite &&
         invite.to.email === myUser.email &&
@@ -85,11 +83,6 @@ function Notification() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (requestId) {
-        // readFireBase("Invites", `${requestId}/to`).then((res) => {
-        //   console.log(res);
-
-
-        // });
         updateFireBase("Invites", requestId, "request_status", "expire");
       }
 
