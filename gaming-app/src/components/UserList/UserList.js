@@ -74,9 +74,9 @@ function UserList() {
           theme: "dark",
         });
         updateFireBase("Invites", requestKey, "request_status", "expire");
-        readFireBase("Invites", `${requestKey}/to`).then((res) => {
-          updateFireBase("UserList", res.email, "invite_expire", requestKey);
-        });
+        // readFireBase("Invites", `${requestKey}/to`).then((res) => {
+        //   updateFireBase("UserList", res.email, "invite_expire", requestKey);
+        // });
         closeModal();
         removeFromSession("sessionId");
       }
@@ -87,9 +87,9 @@ function UserList() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (requestId) {
-        readFireBase("Invites", `${requestId}/to`).then((res) => {
-          updateFireBase("UserList", res.email, "invite_expire", requestId);
-        });
+        // readFireBase("Invites", `${requestId}/to`).then((res) => {
+        //   updateFireBase("UserList", res.email, "invite_expire", requestId);
+        // });
         updateFireBase("Invites", requestId, "request_status", "expire");
         removeFromSession("sessionId");
         closeModal();

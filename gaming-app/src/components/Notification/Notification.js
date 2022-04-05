@@ -85,11 +85,9 @@ function Notification() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (requestId) {
-        readFireBase("Invites", `${requestId}/to`).then((res) => {
-          console.log(res);
-
-          updateFireBase("UserList", res.email, "invite_expire", requestId);
-        });
+        // readFireBase("Invites", `${requestId}/to`).then((res) => {
+        //   console.log(res);
+        // });
         updateFireBase("Invites", requestId, "request_status", "expire");
       }
 
