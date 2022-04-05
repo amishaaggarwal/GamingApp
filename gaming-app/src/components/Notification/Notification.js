@@ -50,7 +50,7 @@ function Notification() {
     };
   }, [requestId]);
 
-  //-checks at reciever side if request is accepted
+  //-checks at reciever side if request is accepted or pending
   useEffect(() => {
     if (requestId && reqData) {
       let invite = reqData[requestId];
@@ -87,6 +87,8 @@ function Notification() {
       if (requestId) {
         // readFireBase("Invites", `${requestId}/to`).then((res) => {
         //   console.log(res);
+
+
         // });
         updateFireBase("Invites", requestId, "request_status", "expire");
       }

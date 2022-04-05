@@ -78,18 +78,7 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
             updateFireBase("GameID", newKey, "total_wins", 1);
           }
           break;
-        // case "invite_expire":
-        //   {
-        //     let newval;
-        //     readFireBase("UserList", `${newKey}/invite_id`).then((res) => {
-        //       newval = res ? res : [];
-        //       newval = newval.filter((f) => f !== value);
-        //       update(ref(db, `${endpoint}/${newKey}`), {
-        //         invite_id: newval,
-        //       });
-        //     });
-        //   }
-        //   break;
+    
         case "invite_add":
           update(ref(db, `${endpoint}/${newKey}`), {
             invite_id: value,
