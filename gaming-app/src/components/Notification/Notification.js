@@ -7,14 +7,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import {
   readFireBase,
-  updateFireBase
+  updateFireBase,
 } from "utils/firebaseSetup/firebaseFunctions";
 import { db } from "utils/firebaseSetup/FirebaseSetup";
 import {
-  getSessionStorage, setSessionStorage
+  getSessionStorage,
+  setSessionStorage,
 } from "utils/Storage/SessionStorage";
 
-function Notification(props) {
+function Notification() {
   const [open, setOpen] = useState(false);
   const [reqData, setReqData] = useState({});
   const myUser = JSON.parse(getSessionStorage("user"));
@@ -53,6 +54,7 @@ function Notification(props) {
   useEffect(() => {
     if (requestId && reqData) {
       let invite = reqData[requestId];
+      // console.log(requestId, myUser.email, invite);
       if (
         invite &&
         invite.to.email === myUser.email &&
@@ -77,17 +79,20 @@ function Notification(props) {
         setRequestId(invite.requestId);
       }
     }
-  }, [reqData, requestKey, myUser.email, props, setIsmulti, requestId]);
+  }, [reqData, requestKey, myUser.email, setIsmulti, requestId]);
 
   //-Expires the request after 1 min
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (requestId) {
         readFireBase("Invites", `${requestId}/to`).then((res) => {
+          console.log(res);
+
           updateFireBase("UserList", res.email, "invite_expire", requestId);
         });
         updateFireBase("Invites", requestId, "request_status", "expire");
       }
+
       setOpen(false);
     }, 60000);
     return () => {

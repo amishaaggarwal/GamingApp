@@ -44,7 +44,7 @@ function UserList() {
         request.from.email === myUser.email
       ) {
         setIsmulti(true);
-        // navigate(`${request.game}`, { replace: true });
+        
         <Navigate to={`dashboard/${request.game}`} />;
       }
     });
