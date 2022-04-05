@@ -75,18 +75,15 @@ function UserList() {
           theme: "dark",
         });
         updateFireBase("Invites", requestKey, "request_status", "expire");
-        // readFireBase("Invites", `${requestKey}/to`).then((res) => {
-        //   // updateFireBase("UserList", res.email, "invite_expire", requestKey);
-        // });
+       
         closeModal();
-        removeFromSession("sessionId")
+        removeFromSession("sessionId");
       }
     });
   }, [myUser.email, requestKey]);
 
   //-Expires sent request
   useEffect(() => {
-    
     const timeout = setTimeout(() => {
       if (requestId) {
         // readFireBase("Invites", `${requestId}/to`).then((res) => {

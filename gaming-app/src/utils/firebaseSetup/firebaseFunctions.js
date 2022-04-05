@@ -78,37 +78,11 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
             updateFireBase("GameID", newKey, "total_wins", 1);
           }
           break;
-        // case "invite_expire":
-        //   {
-        //     let newval;
-        //     readFireBase("UserList", `${newKey}/invite_id`).then((res) => {
-        //       newval = res ? res : [];
-        //       console.log(newval);
-        //       newval = newval.filter((f) => f !== value);
-        //       console.log(newval);
-        //       update(ref(db, `${endpoint}/${newKey}`), {
-        //         invite_id: newval,
-        //       });
-        //     });
-        //     //- async await issue
-           
-        //     setTimeout(() => {
-              
-        //     }, 1000);
-            
-        //   }
-        //   break;
+    
         case "invite_add":
-          {
-            let newval;
-            readFireBase("UserList", `${newKey}/invite_id`).then((res) => {
-              newval = res ? res : [];
-              newval.push(value);
-              update(ref(db, `${endpoint}/${newKey}`), {
-                invite_id: newval,
-              });
-            });
-          }
+          update(ref(db, `${endpoint}/${newKey}`), {
+            invite_id: value,
+          });
           break;
         default:
           break;
@@ -165,7 +139,6 @@ export const updateFireBase = (endpoint, newKey, keys, value) => {
           }
           break;
         case "total_games":
-          newKey = newKey.replace(/[^a-zA-Z/\d]/g, "");
           readFireBase("GameID", `tic-tac/total_games`).then((res) => {
             let newval = res ? parseInt(res) : 0;
             update(ref(db, `${endpoint}/${newKey}`), {
