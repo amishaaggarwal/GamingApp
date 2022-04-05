@@ -6,6 +6,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { toMultiplayer } from "App";
+import { reload } from "firebase/auth";
 import { child, onValue, push, ref } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
 import Modal from "react-modal";
@@ -59,7 +60,7 @@ function UserList() {
   const closeModal = () => {
     setOpen(false);
   };
-
+  
   //-Listens to rejected requests
   useEffect(() => {
     onValue(ref(db, `Invites/${requestKey}`), (data) => {
@@ -74,9 +75,9 @@ function UserList() {
           theme: "dark",
         });
         updateFireBase("Invites", requestKey, "request_status", "expire");
-        readFireBase("Invites", `${requestKey}/to`).then((res) => {
-          updateFireBase("UserList", res.email, "invite_expire", requestKey);
-        });
+        // readFireBase("Invites", `${requestKey}/to`).then((res) => {
+        //   // updateFireBase("UserList", res.email, "invite_expire", requestKey);
+        // });
         closeModal();
         removeFromSession("sessionId")
       }
@@ -88,9 +89,9 @@ function UserList() {
     
     const timeout = setTimeout(() => {
       if (requestId) {
-        readFireBase("Invites", `${requestId}/to`).then((res) => {
-          updateFireBase("UserList", res.email, "invite_expire", requestId);
-        });
+        // readFireBase("Invites", `${requestId}/to`).then((res) => {
+        //   updateFireBase("UserList", res.email, "invite_expire", requestId);
+        // });
         updateFireBase("Invites", requestId, "request_status", "expire");
         removeFromSession("sessionId");
         closeModal();
@@ -154,6 +155,7 @@ function UserList() {
     updateFireBase("Invites", requestId, "from", myUser.email);
     updateFireBase("Invites", requestId, "to", "");
     closeModal();
+    reload();
   };
 
   return (
@@ -162,6 +164,7 @@ function UserList() {
         isOpen={open}
         className="request-cancel"
         overlayClassName="modal-overlay"
+        
       >
         <Button
           className="cancel-btn"

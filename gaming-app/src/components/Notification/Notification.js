@@ -50,7 +50,7 @@ function Notification() {
     };
   }, [requestId]);
 
-  //-checks at reciever side if request is accepted
+  //-checks at reciever side if request is accepted or pending
   useEffect(() => {
     if (requestId && reqData) {
       let invite = reqData[requestId];
@@ -85,11 +85,11 @@ function Notification() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (requestId) {
-        readFireBase("Invites", `${requestId}/to`).then((res) => {
-          console.log(res);
+        // readFireBase("Invites", `${requestId}/to`).then((res) => {
+        //   console.log(res);
 
-          updateFireBase("UserList", res.email, "invite_expire", requestId);
-        });
+        //   // updateFireBase("UserList", res.email, "invite_expire", requestId);
+        // });
         updateFireBase("Invites", requestId, "request_status", "expire");
       }
 

@@ -48,7 +48,7 @@ export default function Login() {
     setUser(currentUser);
   });
 
-  //- redirection 
+  //- redirection
   const redirectTo = (path) => {
     navigate(path);
   };
@@ -71,7 +71,13 @@ export default function Login() {
         "https://example.com/jane-q-user/profile.jpg"
       );
       updateFireBase("UserList", email, "scoreCredit", 0);
-
+      setSessionStorage(
+        "user",
+        JSON.stringify({
+          name: username,
+          email: email,
+        })
+      );
       toast.success(`Welcome to the game dashboard!`, {
         theme: "dark",
       });
@@ -91,7 +97,13 @@ export default function Login() {
       toast.success(`Logged-in Success!`, {
         theme: "dark",
       });
-     
+      setSessionStorage(
+        "user",
+        JSON.stringify({
+          name: user.user.displayName,
+          email: email,
+        })
+      );
       redirectTo("/dashboard");
     } catch (error) {
       let index = error.message.indexOf("/");
@@ -170,7 +182,7 @@ export default function Login() {
             email: user.email,
           })
         );
-       
+
         redirectTo("/dashboard");
       })
       .catch((error) => {
